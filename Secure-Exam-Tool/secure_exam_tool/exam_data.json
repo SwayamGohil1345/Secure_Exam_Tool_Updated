@@ -1,0 +1,268 @@
+{
+  "exam_id": "GATE_SAMPLE_2025",
+  "title": "GATE Practice Exam",
+  "duration_minutes": 60,
+  "total_questions": 20,
+  "questions": [
+    {
+      "id": 116,
+      "question": "Which number comes next: 1, 2, 4, 7, 11, __?",
+      "options": [
+        "14",
+        "15",
+        "16",
+        "17"
+      ],
+      "correct_answer": 2,
+      "category": "logical",
+      "difficulty": "medium"
+    },
+    {
+      "id": 136,
+      "question": "What is the meaning of 'Pragmatic'?",
+      "options": [
+        "Theoretical",
+        "Practical",
+        "Idealistic",
+        "Abstract"
+      ],
+      "correct_answer": 1,
+      "category": "verbal",
+      "difficulty": "hard"
+    },
+    {
+      "id": 98,
+      "question": "If today is Friday, what day will it be after 15 days?",
+      "options": [
+        "Saturday",
+        "Sunday",
+        "Monday",
+        "Tuesday"
+      ],
+      "correct_answer": 0,
+      "category": "logical",
+      "difficulty": "easy"
+    },
+    {
+      "id": 170,
+      "question": "Choose the grammatically correct sentence:",
+      "options": [
+        "Between you and I",
+        "Between you and me",
+        "Between you and myself",
+        "Between you and mine"
+      ],
+      "correct_answer": 1,
+      "category": "verbal",
+      "difficulty": "hard"
+    },
+    {
+      "id": 101,
+      "question": "What is the value of 18% of 250?",
+      "options": [
+        "40",
+        "45",
+        "50",
+        "55"
+      ],
+      "correct_answer": 1,
+      "category": "quantitative",
+      "difficulty": "medium"
+    },
+    {
+      "id": 126,
+      "question": "What is the value of 22% of 180?",
+      "options": [
+        "35.6",
+        "39.6",
+        "42.6",
+        "45.6"
+      ],
+      "correct_answer": 1,
+      "category": "quantitative",
+      "difficulty": "hard"
+    },
+    {
+      "id": 147,
+      "question": "Which figure comes next: □, △, ○, □, △, __?",
+      "options": [
+        "□",
+        "△",
+        "○",
+        "◇"
+      ],
+      "correct_answer": 2,
+      "category": "logical",
+      "difficulty": "hard"
+    },
+    {
+      "id": 8,
+      "question": "What is the next number in the sequence: 2, 4, 8, 16, __?",
+      "options": [
+        "24",
+        "28",
+        "32",
+        "36"
+      ],
+      "correct_answer": 2,
+      "category": "quantitative",
+      "difficulty": "medium"
+    },
+    {
+      "id": 62,
+      "question": "If 4 workers can complete a task in 8 days, how many workers are needed to complete it in 2 days?",
+      "options": [
+        "8 workers",
+        "12 workers",
+        "16 workers",
+        "20 workers"
+      ],
+      "correct_answer": 2,
+      "category": "quantitative",
+      "difficulty": "easy"
+    },
+    {
+      "id": 54,
+      "question": "If in a certain code language, 'MECHANICAL' is written as 'NFDIBOJDBM', how is 'ENGINEERING' written?",
+      "options": [
+        "FOHJOFFSJOH",
+        "FOHJOFFSJOH",
+        "FOHJOFFSJOH",
+        "FOHJOFFSJOH"
+      ],
+      "correct_answer": 0,
+      "category": "logical",
+      "difficulty": "hard"
+    },
+    {
+      "id": 269,
+      "question": "What is the probability of getting exactly 5 heads when tossing 7 coins?",
+      "options": [
+        "1/32",
+        "3/64",
+        "5/64",
+        "7/64"
+      ],
+      "correct_answer": 2,
+      "category": "quantitative",
+      "difficulty": "hard"
+    },
+    {
+      "id": 182,
+      "question": "What is the perimeter of a square with side length 8 units?",
+      "options": [
+        "24 units",
+        "32 units",
+        "40 units",
+        "48 units"
+      ],
+      "correct_answer": 1,
+      "category": "quantitative",
+      "difficulty": "hard"
+    },
+    {
+      "id": 172,
+      "question": "A rectangle has length 12 units and width 8 units. What is its diagonal length?",
+      "options": [
+        "10 units",
+        "12 units",
+        "14 units",
+        "16 units"
+      ],
+      "correct_answer": 2,
+      "category": "quantitative",
+      "difficulty": "hard"
+    },
+    {
+      "id": 243,
+      "question": "Complete the sentence: The _____ of the situation was immediately apparent to everyone.",
+      "options": [
+        "gravity",
+        "levity",
+        "clarity",
+        "simplicity"
+      ],
+      "correct_answer": 0,
+      "category": "verbal",
+      "difficulty": "medium"
+    },
+    {
+      "id": 223,
+      "question": "What is the meaning of 'Ephemeral'?",
+      "options": [
+        "Eternal",
+        "Temporary",
+        "Permanent",
+        "Enduring"
+      ],
+      "correct_answer": 1,
+      "category": "verbal",
+      "difficulty": "medium"
+    },
+    {
+      "id": 69,
+      "question": "If today is Wednesday, what day will it be after 10 days?",
+      "options": [
+        "Saturday",
+        "Sunday",
+        "Monday",
+        "Tuesday"
+      ],
+      "correct_answer": 0,
+      "category": "logical",
+      "difficulty": "easy"
+    },
+    {
+      "id": 208,
+      "question": "If 7 workers can complete a task in 14 days, how many workers are needed to complete it in 3 days?",
+      "options": [
+        "28 workers",
+        "30 workers",
+        "32 workers",
+        "35 workers"
+      ],
+      "correct_answer": 2,
+      "category": "quantitative",
+      "difficulty": "medium"
+    },
+    {
+      "id": 242,
+      "question": "Choose the word that means the opposite of 'Concise':",
+      "options": [
+        "Brief",
+        "Verbose",
+        "Clear",
+        "Precise"
+      ],
+      "correct_answer": 1,
+      "category": "verbal",
+      "difficulty": "medium"
+    },
+    {
+      "id": 160,
+      "question": "Choose the correct spelling:",
+      "options": [
+        "Occassion",
+        "Occasion",
+        "Occasssion",
+        "Occasssion"
+      ],
+      "correct_answer": 1,
+      "category": "verbal",
+      "difficulty": "hard"
+    },
+    {
+      "id": 196,
+      "question": "Solve: 5x - 10 = 20",
+      "options": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "correct_answer": 2,
+      "category": "quantitative",
+      "difficulty": "hard"
+    }
+  ]
+}

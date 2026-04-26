@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Starting Soon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        .background-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(108, 117, 125, 0.08);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 15%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 70%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            bottom: 25%;
+            left: 25%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-15px) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        /* Main countdown container */
+        .countdown-container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            animation: fadeInUp 1.5s ease-out;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.05);
+            border: 1px solid #dee2e6;
+            backdrop-filter: blur(8px) saturate(110%);
+            max-width: 500px;
+            width: 90vw;
+        }
+
+        .countdown-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .countdown-subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+            letter-spacing: 0.01em;
+        }
+
+        .countdown-timer {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #495057;
+            margin-bottom: 2rem;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            animation: pulse 1s ease-in-out infinite alternate;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .countdown-timer.animate {
+            animation: numberChange 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes numberChange {
+            0% {
+                transform: scale(1) rotateY(0deg);
+                opacity: 1;
+                color: #495057;
+            }
+            25% {
+                transform: scale(1.3) rotateY(90deg);
+                opacity: 0.6;
+                color: #6c757d;
+            }
+            50% {
+                transform: scale(0.7) rotateY(180deg);
+                opacity: 0.2;
+                color: #868e96;
+            }
+            75% {
+                transform: scale(1.2) rotateY(270deg);
+                opacity: 0.6;
+                color: #6c757d;
+            }
+            100% {
+                transform: scale(1) rotateY(360deg);
+                opacity: 1;
+                color: #495057;
+            }
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            to {
+                transform: scale(1.05);
+                text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+        }
+
+        .countdown-message {
+            font-size: 1.1rem;
+            color: #495057;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(108, 117, 125, 0.15);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #495057, #6c757d);
+            border-radius: 3px;
+            width: 100%;
+            transition: width 1s linear;
+            box-shadow: 0 0 8px rgba(73, 80, 87, 0.3);
+        }
+
+        .exam-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid #e9ecef;
+        }
+
+        .exam-info h3 {
+            font-size: 1.3rem;
+            color: #343a40;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .exam-info ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .exam-info li {
+            padding: 0.5rem 0;
+            color: #495057;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .exam-info li:before {
+            content: "•";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .countdown-container {
+                padding: 2rem 1.5rem;
+            }
+            .countdown-title {
+                font-size: 1.8rem;
+            }
+            .countdown-timer {
+                font-size: 3rem;
+            }
+            .countdown-subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="countdown-container" id="countdownContainer">
+        <h1 class="countdown-title">Exam Starting Soon</h1>
+        <p class="countdown-subtitle">Please prepare yourself for the examination</p>
+        
+        <div class="countdown-timer" id="countdownTimer">10</div>
+        <p class="countdown-message" id="countdownMessage">Exam will start in <span id="timeLeft">10</span> seconds</p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="exam-info">
+            <h3>📚 Exam Guidelines</h3>
+            <ul>
+                <li>Ensure your camera and microphone are working</li>
+                <li>Find a quiet, well-lit environment</li>
+                <li>Keep only necessary materials nearby</li>
+                <li>Stay focused and avoid distractions</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Check if current user is blocked
+        async function checkIfUserBlocked() {
+            try {
+                const userEmail = sessionStorage.getItem('userEmail');
+                const userUsername = sessionStorage.getItem('userUsername');
+                
+                if (userEmail && userUsername) {
+                    const response = await fetch('/api/check_blocked_status', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: userEmail, username: userUsername })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.is_blocked) {
+                        // User is blocked, redirect to violation page
+                        window.location.href = '/cheating_violation';
+                        return true;
+                    }
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking blocked status:', error);
+                return false;
+            }
+        }
+        
+        let timeLeft = 10;
+        const timerElement = document.getElementById('countdownTimer');
+        const messageElement = document.getElementById('countdownMessage');
+        const timeLeftSpan = document.getElementById('timeLeft');
+        const progressFill = document.getElementById('progressFill');
+        
+        // Check if user is blocked before starting countdown
+        (async function() {
+            const isBlocked = await checkIfUserBlocked();
+            if (isBlocked) {
+                return; // User will be redirected to violation page
+            }
+            
+            // Start countdown only if user is not blocked
+            const countdown = setInterval(() => {
+                timeLeft--;
+                
+                // Add animation class to trigger smooth transition
+                timerElement.classList.add('animate');
+                
+                // Update timer display with slight delay for smooth effect
+                setTimeout(() => {
+                    timerElement.textContent = timeLeft;
+                    timeLeftSpan.textContent = timeLeft;
+                }, 200);
+                
+                // Remove animation class after animation completes
+                setTimeout(() => {
+                    timerElement.classList.remove('animate');
+                }, 800);
+                
+                // Update progress bar
+                const progressPercentage = ((10 - timeLeft) / 10) * 100;
+                progressFill.style.width = progressPercentage + '%';
+                
+                // Update message
+                if (timeLeft === 1) {
+                    messageElement.textContent = 'Exam will start in 1 second';
+                } else {
+                    messageElement.textContent = `Exam will start in ${timeLeft} seconds`;
+                }
+                
+                // When countdown reaches 0
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerElement.textContent = 'Starting...';
+                    messageElement.textContent = 'Redirecting to exam...';
+                    
+                    // Add fade out animation
+                    const container = document.getElementById('countdownContainer');
+                    container.style.animation = 'fadeOut 0.5s ease-out forwards';
+                    
+                    setTimeout(() => {
+                        // Get the exam URL from session storage
+                        const examUrl = sessionStorage.getItem('examRedirectUrl');
+                        if (examUrl) {
+                            sessionStorage.removeItem('examRedirectUrl'); // Clean up
+                            window.location.href = examUrl;
+                        } else {
+                            window.location.href = '/login';
+                        }
+                    }, 500);
+                }
+            }, 1000);
+        })();
+        
+        // Add fade out animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.95); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

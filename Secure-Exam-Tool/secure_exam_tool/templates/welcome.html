@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Reasonify</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(108, 117, 125, 0.08);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .particle:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            right: 30%;
+            animation-delay: 1s;
+        }
+
+        .particle:nth-child(5) {
+            width: 40px;
+            height: 40px;
+            bottom: 40%;
+            right: 20%;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Main welcome container */
+        .welcome-container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        .welcome-logo {
+            font-size: 4.5rem;
+            font-weight: 400;
+            color: #495057;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            animation: elegantGlow 3s ease-in-out infinite alternate;
+            letter-spacing: 0.05em;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.4rem;
+            color: #6c757d;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            font-style: italic;
+            animation: slideInUp 1s ease-out 0.5s both;
+            letter-spacing: 0.02em;
+        }
+
+        .loading-bar {
+            width: 250px;
+            height: 3px;
+            background: rgba(108, 117, 125, 0.15);
+            border-radius: 1.5px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            animation: slideInUp 1s ease-out 1s both;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #6c757d, #495057);
+            border-radius: 1.5px;
+            width: 0%;
+            animation: loading 5s ease-in-out forwards;
+            box-shadow: 0 0 8px rgba(108, 117, 125, 0.3);
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes elegantGlow {
+            from {
+                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                color: #495057;
+            }
+            to {
+                text-shadow: 0 3px 12px rgba(73, 80, 87, 0.2);
+                color: #343a40;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Slide out animation */
+        .slide-out {
+            animation: slideOutUp 1s ease-in-out forwards;
+        }
+
+        @keyframes slideOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .welcome-logo {
+                font-size: 3.5rem;
+            }
+            .welcome-subtitle {
+                font-size: 1.3rem;
+            }
+            .loading-bar {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="welcome-container" id="welcomeContainer">
+        <div class="welcome-logo">📚</div>
+        <h1 class="welcome-logo">Welcome to Reasonify</h1>
+        <p class="welcome-subtitle">Where Knowledge Meets Excellence</p>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <script>
+        // After 5 seconds, slide out and redirect to instructions
+        setTimeout(() => {
+            const container = document.getElementById('welcomeContainer');
+            container.classList.add('slide-out');
+            
+            setTimeout(() => {
+                window.location.href = '/instructions';
+            }, 1000);
+        }, 5000);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheating Violation - Exam Disqualified</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 30%, #dee2e6 70%, #ced4da 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        .background-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(220, 53, 69, 0.08);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 15%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 70%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .particle:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            bottom: 25%;
+            left: 25%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-15px) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        /* Main violation container */
+        .violation-container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            animation: fadeInUp 1.5s ease-out;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 18px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.1);
+            border: 2px solid #dc3545;
+            backdrop-filter: blur(10px) saturate(110%);
+            max-width: 600px;
+            width: 90vw;
+        }
+
+        .violation-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .violation-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .violation-subtitle {
+            font-size: 1.3rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .violation-message {
+            font-size: 1.1rem;
+            color: #495057;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .violation-details {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e9ecef;
+            text-align: left;
+        }
+
+        .violation-details h4 {
+            color: #dc3545;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .violation-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .violation-details li {
+            padding: 0.5rem 0;
+            color: #495057;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .violation-details li:before {
+            content: "⚠️";
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .blocked-info {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 16px rgba(220, 53, 69, 0.2);
+        }
+
+        .blocked-info h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .blocked-info p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .home-button {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: 0 6px 20px rgba(73, 80, 87, 0.2);
+            transition: all 0.3s cubic-bezier(.4,0,.2,1);
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(73, 80, 87, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .redirect-info {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(255, 193, 7, 0.2);
+        }
+        
+        .redirect-info h4 {
+            color: #856404;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .redirect-info p {
+            color: #856404;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .redirect-info small {
+            color: #856404;
+            opacity: 0.8;
+        }
+        
+        #mainCountdown {
+            font-weight: bold;
+            color: #dc3545;
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .violation-container {
+                padding: 2rem 1.5rem;
+            }
+            .violation-title {
+                font-size: 2rem;
+            }
+            .violation-subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="violation-container">
+        <div class="violation-icon">🚫</div>
+        
+        <h1 class="violation-title">Exam Disqualified</h1>
+        <p class="violation-subtitle">Cheating Violation Detected</p>
+        
+        <div class="violation-message">
+            Your exam session has been terminated due to multiple cheating violations. 
+            Academic integrity is fundamental to our examination process, and any form of 
+            cheating undermines the fairness and credibility of the assessment.
+        </div>
+        
+        <div class="violation-details">
+            <h4>🚨 Violations Detected:</h4>
+            <ul>
+                <li>Excessive tab switching or window switching</li>
+                <li>Multiple gaze violations (looking away from screen)</li>
+                <li>Copy/paste attempts or keyboard shortcuts</li>
+                <li>Page reload or navigation attempts</li>
+                <li>Other suspicious activities during exam</li>
+            </ul>
+        </div>
+        
+        <div class="blocked-info">
+            <h4>🔒 Account Blocked</h4>
+            <p><strong>Status:</strong> Your account has been permanently blocked</p>
+            <p><strong>Reason:</strong> Multiple cheating violations during exam</p>
+            <p><strong>Action:</strong> You are no longer allowed to register or login</p>
+            <p><strong>Duration:</strong> Permanent ban from the exam system</p>
+        </div>
+        
+        <div class="violation-message">
+            <strong>Important Notice:</strong> This decision is final and cannot be appealed. 
+            Your account information has been recorded in our system to prevent future access attempts. 
+            We take academic integrity seriously and maintain strict standards for all examinations.
+        </div>
+        
+        <div class="redirect-info">
+            <h4>⏰ Automatic Redirect</h4>
+                            <p>You will be automatically redirected to the instructions page in <span id="mainCountdown">5</span> seconds.</p>
+            <p><small>Navigation is blocked to prevent access to the exam system.</small></p>
+        </div>
+        
+        <a href="/login" class="home-button">Return to Login</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Prevent going back to exam
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, null, window.location.href);
+        };
+        
+        // Prevent keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.altKey || e.metaKey) {
+                e.preventDefault();
+            }
+        });
+        
+        // Prevent right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Prevent browser back/forward buttons and redirect after 1 minute
+        let redirectTimer;
+        
+        function preventNavigation() {
+            // Disable browser back button
+            window.history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', function() {
+                window.history.pushState(null, null, window.location.href);
+                showNavigationWarning();
+            });
+            
+            // Disable browser forward button but allow redirect to instructions
+            window.addEventListener('beforeunload', function(e) {
+                // Allow redirect to instructions page
+                if (window.location.href.includes('/instructions')) {
+                    return;
+                }
+                e.preventDefault();
+                e.returnValue = '';
+                showNavigationWarning();
+                return '';
+            });
+            
+            // Disable Alt+Left/Right (browser navigation)
+            document.addEventListener('keydown', function(e) {
+                if (e.altKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                    e.preventDefault();
+                    showNavigationWarning();
+                }
+            });
+            
+            // Disable Ctrl+Left/Right (browser navigation)
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                    e.preventDefault();
+                    showNavigationWarning();
+                }
+            });
+        }
+        
+        function showNavigationWarning() {
+            // Create warning message
+            const warningDiv = document.createElement('div');
+            warningDiv.id = 'navigationWarning';
+            warningDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
+                z-index: 10000;
+                font-family: 'Georgia', 'Times New Roman', serif;
+                font-size: 1.1rem;
+                text-align: center;
+                max-width: 400px;
+                animation: slideInDown 0.3s ease-out;
+            `;
+            warningDiv.innerHTML = `
+                <div style="font-size: 2rem; margin-bottom: 10px;">🚫</div>
+                <strong>Navigation Blocked</strong><br>
+                You cannot navigate away from this page.<br>
+                You will be redirected to instructions in <span id="countdown">5</span> seconds.
+            `;
+            
+            document.body.appendChild(warningDiv);
+            
+            // Auto-remove warning after 3 seconds
+            setTimeout(() => {
+                if (warningDiv.parentNode) {
+                    warningDiv.style.animation = 'slideOutUp 0.3s ease-in';
+                    setTimeout(() => warningDiv.remove(), 300);
+                }
+            }, 3000);
+        }
+        
+        function startRedirectCountdown() {
+            let secondsLeft = 5;
+            const countdownElement = document.getElementById('countdown');
+            const mainCountdownElement = document.getElementById('mainCountdown');
+            
+            console.log('Starting redirect countdown with', secondsLeft, 'seconds');
+            console.log('Countdown element:', countdownElement);
+            console.log('Main countdown element:', mainCountdownElement);
+            
+            redirectTimer = setInterval(() => {
+                secondsLeft--;
+                console.log('Countdown:', secondsLeft, 'seconds left');
+                
+                if (countdownElement) {
+                    countdownElement.textContent = secondsLeft;
+                }
+                if (mainCountdownElement) {
+                    mainCountdownElement.textContent = secondsLeft;
+                }
+                
+                if (secondsLeft <= 0) {
+                    console.log('Redirecting to instructions page...');
+                    clearInterval(redirectTimer);
+                    
+                    // Force redirect with multiple methods
+                    const redirectToInstructions = () => {
+                        try {
+                            window.location.href = '/instructions';
+                        } catch (error) {
+                            console.error('Error with href redirect:', error);
+                            try {
+                                window.location.replace('/instructions');
+                            } catch (error2) {
+                                console.error('Error with replace redirect:', error2);
+                                try {
+                                    window.location.assign('/instructions');
+                                } catch (error3) {
+                                    console.error('Error with assign redirect:', error3);
+                                    // Create and click a link as final fallback
+                                    const link = document.createElement('a');
+                                    link.href = '/instructions';
+                                    link.style.display = 'none';
+                                    document.body.appendChild(link);
+                                    link.click();
+                                }
+                            }
+                        }
+                    };
+                    
+                    // Execute redirect immediately
+                    redirectToInstructions();
+                    
+                    // Backup redirect after 1 second if still on same page
+                    setTimeout(() => {
+                        if (window.location.pathname === '/cheating_violation') {
+                            console.log('Backup redirect triggered...');
+                            redirectToInstructions();
+                        }
+                    }, 1000);
+                }
+            }, 1000);
+        }
+        
+        // Initialize navigation prevention and countdown
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing blocked user page...');
+            preventNavigation();
+            console.log('Navigation prevention initialized');
+            startRedirectCountdown();
+            console.log('Redirect countdown started');
+            
+            // Test redirect after 7 seconds to ensure it works
+            setTimeout(() => {
+                console.log('Testing redirect functionality...');
+                if (window.location.pathname === '/cheating_violation') {
+                    console.log('Still on cheating violation page, forcing redirect...');
+                    window.location.href = '/instructions';
+                }
+            }, 7000);
+            
+            // Add CSS for animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInDown {
+                    from { transform: translate(-50%, -60%); opacity: 0; }
+                    to { transform: translate(-50%, -50%); opacity: 1; }
+                }
+                @keyframes slideOutUp {
+                    from { transform: translate(-50%, -50%); opacity: 1; }
+                    to { transform: translate(-50%, -60%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html> 

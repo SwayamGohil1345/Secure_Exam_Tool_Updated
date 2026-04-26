@@ -1,0 +1,3439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Exam Room</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 30%, #dee2e6 70%, #ced4da 100%);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            min-height: 100vh;
+            color: #343a40;
+        }
+        .exam-container {
+            display: flex;
+            height: 100vh;
+            gap: 20px;
+        }
+        .exam-content {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            margin: 20px;
+            box-shadow: 0 16px 56px rgba(0,0,0,0.12), 0 6px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+            max-height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+        .proctor-panel {
+            width: 350px;
+            background: rgba(248, 249, 250, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px 15px 15px 0;
+            box-shadow: 0 16px 56px rgba(0,0,0,0.12), 0 6px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+            max-height: calc(100vh - 30px);
+            overflow-y: auto;
+        }
+        .proctor-panel .mb-3, .proctor-panel .gaze-info, .proctor-panel .step-status {
+            width: 100%;
+            word-break: break-word;
+            white-space: normal;
+            max-width: 100%;
+            overflow-wrap: break-word;
+            font-size: 0.97rem;
+            padding: 2px 0;
+            margin-bottom: 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .proctor-panel h5 {
+            align-self: flex-start;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .status-indicator {
+            width: 100%;
+        }
+        .camera-feed {
+            width: 100%;
+            height: 160px;
+            background: #000;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border: 2px solid #e9ecef;
+        }
+        .warning-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .status-indicator {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .status-active {
+            background: linear-gradient(135deg, #d1e7dd 0%, #a3d9a4 100%);
+        }
+        
+        /* New info-panel styling */
+        .info-panel {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #f1f3f4;
+            font-size: 0.85rem;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-item strong {
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        .info-item span {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .gaze-status-item {
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 8px;
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .gaze-info {
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            font-size: 0.8rem;
+            color: #6c757d;
+            line-height: 1.3;
+        }
+        
+        /* Timer styling */
+        .timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #dc3545;
+            text-align: center;
+            padding: 8px;
+            background: rgba(220, 53, 69, 0.1);
+            border-radius: 8px;
+            border: 2px solid #dc3545;
+            margin-bottom: 10px;
+        }
+        
+        .status-active {
+            color: #0f5132;
+            border: 2px solid #198754;
+            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2);
+        }
+        .status-warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffd54f 100%);
+            color: #664d03;
+            border: 2px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+        }
+        .status-danger {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c2c7 100%);
+            color: #58151c;
+            border: 2px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+        }
+        
+        /* Advanced Question Styling */
+        .exam-question {
+            background: rgba(255, 255, 255, 0.99);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid #f1f3f4;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .exam-question::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #495057, #6c757d, #868e96);
+            border-radius: 16px 16px 0 0;
+        }
+        .exam-question:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.15), 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .exam-question h4 {
+            color: #212529;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .exam-question h4::before {
+            content: '📚';
+            margin-right: 15px;
+            font-size: 1.4rem;
+        }
+        .exam-question p {
+            color: #495057;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        /* Advanced Answer Options */
+        .answer-option {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .answer-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(73, 80, 87, 0.08), transparent);
+            transition: left 0.5s ease;
+        }
+        .answer-option:hover {
+            border-color: #495057;
+            background: rgba(73, 80, 87, 0.03);
+            transform: translateX(4px);
+            box-shadow: 0 6px 16px rgba(73, 80, 87, 0.12);
+        }
+        
+        .answer-option.selected {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #495057;
+            box-shadow: 0 8px 24px rgba(73, 80, 87, 0.15), 0 4px 12px rgba(73, 80, 87, 0.08);
+            transform: translateX(6px);
+        }
+        
+        .answer-option.selected::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #495057, #6c757d);
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .answer-option.selected label {
+            color: #212529;
+            font-weight: 600;
+        }
+        
+        .answer-option.selected label::before {
+            border-color: #495057;
+            background: #495057;
+            box-shadow: 0 0 0 3px rgba(73, 80, 87, 0.2);
+        }
+        .answer-option:hover::before {
+            left: 100%;
+        }
+        .answer-option input[type="radio"] {
+            display: none;
+        }
+        .answer-option label {
+            cursor: pointer;
+            font-size: 1.05rem;
+            color: #343a40;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            margin: 0;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .answer-option label::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #495057;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .answer-option input[type="radio"]:checked + label::before {
+            background: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .answer-option input[type="radio"]:checked + label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        .answer-option.selected {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Timer Styling */
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #dc3545;
+            text-align: center;
+            margin-bottom: 18px;
+            margin-top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #dc3545;
+            animation: pulse 2s infinite;
+            width: 100%;
+            position: static !important;
+            left: unset !important;
+            transform: none !important;
+            bottom: unset !important;
+            z-index: 1;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(40, 167, 69, 0.4);
+        }
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Header Styling */
+        .exam-header {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .exam-header h2 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        .exam-header h2::before {
+            content: '🔒';
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        /* Progress Indicator */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .gaze-info {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #666;
+            word-break: break-word;
+            white-space: normal;
+        }
+        
+        /* Pre-Exam Verification Modal */
+        .verification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .verification-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 100%;
+            height: 90vh;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            gap: 30px;
+            overflow: hidden;
+        }
+        
+        .verification-camera-section {
+            flex: 0 0 400px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .verification-steps-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            min-height: 0;
+            padding-right: 10px;
+        }
+        
+        .verification-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #e9ecef;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+        
+        .verification-header h2 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .verification-timer {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #dc3545;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15) 0%, rgba(220, 53, 69, 0.1) 100%);
+            padding: 12px 25px;
+            border-radius: 15px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+            border: 2px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        .verification-timer.complete {
+            color: #28a745;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.15) 0%, rgba(40, 167, 69, 0.1) 100%);
+            border: 2px solid rgba(40, 167, 69, 0.3);
+        }
+        
+        .verification-timer.failed {
+            color: #dc3545;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.15) 0%, rgba(220, 53, 69, 0.1) 100%);
+            border: 2px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        .verification-camera {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .verification-camera h5 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .verification-camera video {
+            width: 100%;
+            height: 350px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #000;
+            aspect-ratio: 1;
+            flex: 1;
+            min-height: 0;
+        }
+        
+        .verification-steps {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            height: auto;
+            margin-bottom: 25px;
+            overflow: visible;
+        }
+        
+        .verification-step {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: auto;
+            min-height: 180px;
+            overflow: visible;
+        }
+        
+        .verification-step:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .verification-step.completed {
+            border-color: #28a745;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+        }
+        
+        .verification-step.failed {
+            border-color: #dc3545;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);
+        }
+        
+        .step-icon {
+            font-size: 2.2rem;
+            margin-right: 20px;
+            min-width: 60px;
+            text-align: center;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: auto;
+            min-height: 0;
+            gap: 10px;
+        }
+        
+        .step-content h4 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .step-content p {
+            color: #6c757d;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            flex: 1;
+            overflow: visible;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        
+        .step-status {
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: inline-block;
+            min-width: 120px;
+            text-align: center;
+            white-space: normal;
+            overflow: visible;
+            word-wrap: break-word;
+            max-width: 100%;
+            line-height: 1.3;
+        }
+        
+        .step-status.checking {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+            color: #856404;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+        
+        .step-status.success {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.2) 0%, rgba(40, 167, 69, 0.1) 100%);
+            color: #155724;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        
+        .step-status.failed {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.2) 0%, rgba(220, 53, 69, 0.1) 100%);
+            color: #721c24;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        .verification-progress {
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            flex-shrink: 0;
+        }
+        
+        .verification-progress .progress-bar {
+            height: 15px;
+            background: #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .verification-progress .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+        
+        .verification-warnings {
+            margin-bottom: 25px;
+            min-height: 80px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            flex-shrink: 0;
+        }
+        
+        .verification-warning {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.1) 100%);
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(255, 193, 7, 0.2);
+        }
+        
+        .verification-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            flex-shrink: 0;
+        }
+        
+        .verification-actions .btn {
+            padding: 14px 28px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            min-width: 140px;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        .verification-actions .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .verification-actions .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+            color: white;
+        }
+        
+        .verification-actions .btn-success {
+            background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+            border: none;
+            color: white;
+        }
+        
+        .verification-actions .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .exam-container {
+                flex-direction: column;
+            }
+            .proctor-panel {
+                width: 100%;
+                margin: 20px;
+            }
+            .exam-content {
+                margin: 20px;
+            }
+            
+            .verification-content {
+                padding: 20px;
+                margin: 10px;
+                flex-direction: column;
+                height: auto;
+                max-height: 95vh;
+            }
+            
+            .verification-camera-section {
+                flex: none;
+            margin-bottom: 20px;
+            }
+            
+            .verification-camera video {
+                height: 200px;
+            }
+            
+            .verification-steps-section {
+                overflow-y: auto;
+                max-height: 60vh;
+            }
+            
+            .verification-steps {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+                gap: 10px;
+            }
+            
+            .verification-actions {
+                flex-direction: column;
+            }
+        }
+        .adv-next-btn {
+          background: linear-gradient(90deg, #495057, #6c757d, #868e96);
+          color: #fff;
+          font-weight: 600;
+          border: none;
+          border-radius: 12px;
+          box-shadow: 0 6px 20px rgba(73,80,87,0.2);
+          padding: 16px 40px;
+          font-size: 1.2rem;
+          letter-spacing: 0.5px;
+          transition: all 0.3s cubic-bezier(.4,0,.2,1);
+          outline: none;
+          font-family: 'Georgia', 'Times New Roman', serif;
+          margin-top: 20px;
+          margin-bottom: 20px;
+          display: block;
+          width: 100%;
+          max-width: 200px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .adv-next-btn:hover, .adv-next-btn:focus {
+          background: linear-gradient(90deg, #6c757d, #495057, #343a40);
+          box-shadow: 0 8px 28px rgba(73,80,87,0.25);
+          transform: scale(1.045);
+          color: #fff;
+        }
+        .adv-next-btn:active {
+          background: linear-gradient(90deg, #5a189a, #764ba2);
+          box-shadow: 0 2px 8px rgba(90,24,154,0.18);
+          transform: scale(0.98);
+        }
+        .progress-container {
+          margin-bottom: 1.5rem;
+        }
+        .progress {
+          height: 10px;
+          background: #e0e0e0;
+          border-radius: 8px;
+          overflow: hidden;
+          position: relative;
+        }
+        .progress-bar.bg-gradient {
+          background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+          transition: width 0.4s cubic-bezier(.4,0,.2,1);
+          height: 100%;
+          border-radius: 8px 0 0 8px;
+          box-shadow: 0 2px 8px rgba(118,75,162,0.08);
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+        .gaze-status-box {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin: 32px auto 24px auto;
+          padding: 32px 28px;
+          border-radius: 32px;
+          background: rgba(255,255,255,0.18);
+          box-shadow: 0 8px 32px rgba(31,38,135,0.18), 0 1.5px 6px 0 rgba(118,75,162,0.08);
+          backdrop-filter: blur(16px);
+          border: 1.5px solid rgba(255,255,255,0.25);
+          max-width: 420px;
+          min-width: 220px;
+          transition: box-shadow 0.3s cubic-bezier(.4,0,.2,1);
+        }
+        .gaze-indicator-row {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          flex-wrap: wrap;
+        }
+        .gaze-circle {
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          background: #38b000;
+          box-shadow: 0 2px 12px rgba(56,176,0,0.18), 0 1.5px 6px 0 rgba(56,176,0,0.08);
+          transition: background 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.35s cubic-bezier(.4,0,.2,1);
+          display: inline-block;
+        }
+        .gaze-circle.gaze-off {
+          background: #e63946;
+          box-shadow: 0 2px 12px rgba(230,57,70,0.18), 0 1.5px 6px 0 rgba(230,57,70,0.08);
+        }
+        .gaze-status-text {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #22223b;
+          letter-spacing: 0.01em;
+          transition: color 0.35s cubic-bezier(.4,0,.2,1);
+          user-select: none;
+        }
+        @media (max-width: 600px) {
+          .gaze-status-box {
+            padding: 18px 8px;
+            min-width: 120px;
+            max-width: 98vw;
+          }
+          .gaze-status-text {
+            font-size: 1rem;
+          }
+          .gaze-circle {
+            width: 28px;
+            height: 28px;
+          }
+        }
+        .gaze-indicator {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            margin-right: 7px;
+            vertical-align: middle;
+            transition: background 0.3s;
+        }
+        .gaze-indicator-green {
+            background: #38b000;
+            border: 2px solid #38b000;
+        }
+        .gaze-indicator-red {
+            background: #e63946;
+            border: 2px solid #e63946;
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        <div class="exam-content" id="examContent">
+            <div class="exam-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Secure Exam</h2>
+                </div>
+            </div>
+            <!-- Dynamic Progress and Question Container -->
+            <div id="progressContainer"></div>
+            <div id="questionContainer"></div>
+        </div>
+        
+        <div class="proctor-panel">
+            <h5>📹 Proctor Panel</h5>
+            <div class="status-indicator status-active" id="statusIndicator">
+                ✅ Session Active
+            </div>
+            <video id="cameraFeed" class="camera-feed" autoplay muted></video>
+            <canvas id="gazeCanvas" style="display: none;"></canvas>
+            <div class="timer mt-1" id="timer">00:00:00</div>
+            
+            <!-- All information moved under timer -->
+            <div class="info-panel">
+                <div class="info-item">
+                    <strong>Tab Switch Warnings:</strong>
+                    <span id="tabWarnings">0/5</span>
+                </div>
+                <div class="info-item">
+                    <strong>Gaze Violations:</strong>
+                    <span id="gazeWarnings">0/10</span>
+                </div>
+                <div class="info-item">
+                    <strong>Face Detection:</strong>
+                    <span id="faceStatus">Searching...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Face Monitoring:</strong>
+                    <span id="faceDetectionStatus">🔄 Initializing...</span>
+                </div>
+                <div class="info-item">
+                    <strong>Background Monitor:</strong>
+                    <span id="backgroundStatus">🔄 Active</span>
+                </div>
+                <div class="info-item">
+                    <strong>Lip Movement:</strong>
+                    <span id="lipMovementStatus">🔄 Monitoring</span>
+                </div>
+                <div class="info-item gaze-status-item">
+                    <strong>Gaze Status:</strong>
+                    <span id="gazeStatus">🔍 Initializing gaze detection...</span>
+                </div>
+                <div class="info-item detection-status-item">
+                    <strong>Detection Status:</strong>
+                    <span id="detectionStatus">✅ Normal Behavior</span>
+                </div>
+                <div class="gaze-info" id="gazeInfo"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="warningContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const sessionId = '{{ session_id }}';
+        const socket = io();
+        let examStartTime = Date.now();
+        let tabSwitchWarnings = 0;
+        let gazeWarnings = 0;
+        let isSessionActive = true;
+        let isVerificationMode = false;
+        let verificationTime = 180; // 3 minutes
+        let verificationTimer = null;
+        let verificationResults = {
+            mobile: false,
+            electronics: false,
+            people: false,
+            tabs: false
+        };
+        // Prevent page reload/navigation for 60 minutes
+        let examDuration = 60 * 60 * 1000; // 60 minutes in ms
+        let examEndTime = Date.now() + examDuration;
+        function blockReload(e) {
+            e.preventDefault();
+            e.returnValue = 'You cannot reload or leave the exam page until the exam is over.';
+            return 'You cannot reload or leave the exam page until the exam is over.';
+        }
+        function blockKeyReload(e) {
+            // F5, Ctrl+R, Cmd+R
+            if ((e.key === 'F5') || (e.ctrlKey && e.key === 'r') || (e.metaKey && e.key === 'r')) {
+                e.preventDefault();
+                showWarning('You cannot reload or leave the exam page until the exam is over.', 'danger');
+            }
+        }
+        function enableNavigation() {
+            window.onbeforeunload = null;
+            window.removeEventListener('keydown', blockKeyReload, true);
+        }
+        window.onbeforeunload = blockReload;
+        window.addEventListener('keydown', blockKeyReload, true);
+        setTimeout(() => {
+            enableNavigation();
+            showWarning('Exam time is over. You may now leave or reload the page.', 'info');
+        }, examDuration);
+        
+                // Initialize camera and advanced monitoring system
+        async function initializeCamera() {
+            try {
+                console.log('Initializing camera...');
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: 640, 
+                        height: 480,
+                        facingMode: 'user'
+                    } 
+                });
+                
+                videoStream = stream;
+                const video = document.getElementById('cameraFeed');
+                video.srcObject = stream;
+                
+                console.log('Camera stream obtained successfully');
+                
+                // Initialize canvas for frame capture
+                canvas = document.getElementById('gazeCanvas');
+                ctx = canvas.getContext('2d');
+                
+                // Set canvas size to match video
+                video.addEventListener('loadedmetadata', async () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    
+                    console.log('Video metadata loaded, starting monitoring system...');
+                    console.log('Video dimensions:', video.videoWidth, 'x', video.videoHeight);
+                    
+                    // Load face detection models
+                    const modelsLoaded = await loadFaceDetectionModels();
+                    
+                    // Start advanced monitoring system
+                    startAdvancedMonitoring();
+                    
+                    // Update UI status
+                    const backgroundStatus = document.getElementById('backgroundStatus');
+                    if (backgroundStatus) {
+                        backgroundStatus.textContent = '🔄 Active';
+                        backgroundStatus.style.color = '#0d6efd';
+                    }
+                    
+                    // Test camera functionality
+                    setTimeout(() => {
+                        testCameraFunctionality();
+                    }, 3000);
+                });
+                
+                return stream;
+            } catch (error) {
+                console.error('Camera access denied:', error);
+                showWarning('Camera access is required for this exam! Please allow camera access and refresh the page.', 'danger');
+                return null;
+            }
+        }
+        
+        // Periodic check for blocked users
+        function startBlockedUserCheck() {
+            setInterval(() => {
+                const isBlocked = sessionStorage.getItem('userBlocked');
+                if (isBlocked === 'true') {
+                    console.log('User is blocked, forcing redirect...');
+                    forceRedirectToViolation();
+                }
+            }, 5000); // Check every 5 seconds
+        }
+        
+        // Test camera functionality
+        function testCameraFunctionality() {
+            try {
+                const video = document.getElementById('cameraFeed');
+                if (!video || !video.srcObject) {
+                    console.error('Camera test failed: No video stream');
+                    return;
+                }
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0);
+                
+                // Check if video has meaningful content
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                let hasContent = false;
+                let totalPixels = data.length / 4;
+                let contentPixels = 0;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    
+                    // Check for non-black content
+                    if (r > 10 || g > 10 || b > 10) {
+                        contentPixels++;
+                        hasContent = true;
+                    }
+                }
+                
+                const contentPercentage = (contentPixels / totalPixels) * 100;
+                console.log('Camera test - Content percentage:', contentPercentage.toFixed(2) + '%');
+                
+                if (contentPercentage < 5) {
+                    console.warn('Camera appears to be showing mostly black/blank content');
+                    showWarning('Camera may not be working properly. Please check your camera settings.', 'warning');
+                } else {
+                    console.log('Camera functionality test passed');
+                }
+                
+            } catch (error) {
+                console.error('Error testing camera functionality:', error);
+            }
+        }
+        
+        // Tab switching detection
+        let isPageVisible = true;
+        let lastVisibilityChange = Date.now();
+        
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                isPageVisible = false;
+                const timeSinceLastChange = Date.now() - lastVisibilityChange;
+                if (timeSinceLastChange > 1000) { // Debounce
+                    handleTabSwitch();
+                }
+                lastVisibilityChange = Date.now();
+            } else {
+                isPageVisible = true;
+            }
+        });
+        
+        // Window focus detection
+        window.addEventListener('blur', () => {
+            if (isSessionActive) {
+                handleTabSwitch();
+            }
+        });
+        
+        function handleTabSwitch() {
+            if (!isSessionActive) return;
+            
+            tabSwitchWarnings++;
+            totalViolations++;
+            document.getElementById('tabWarnings').textContent = `${tabSwitchWarnings}/3`;
+            
+            socket.emit('tab_switch_detected', { session_id: sessionId });
+            
+            if (tabSwitchWarnings >= MAX_TAB_WARNINGS) {
+                showWarning(`Tab switching detected! Maximum warnings reached. You will be blocked.`, 'danger');
+                setTimeout(() => {
+                    blockUserForCheating('Multiple tab switching violations');
+                }, 2000);
+            } else {
+                showWarning(`Tab switching detected! Warning ${tabSwitchWarnings}/${MAX_TAB_WARNINGS}`, 'warning');
+            }
+            
+            if (checkForBlocking('Tab switching violations')) {
+                return;
+            }
+        }
+        
+        // Advanced camera monitoring system
+        let videoStream = null;
+        let canvas = null;
+        let ctx = null;
+        let frameProcessingInterval = null;
+        let gazeAwayStartTime = null;
+        let gazeAwayTimer = null;
+        
+        // Face detection and monitoring variables
+        let initialFaceImage = null;
+        let faceDetectionInterval = null;
+        let faceMismatchWarnings = 0;
+        let backgroundMonitoringInterval = null;
+
+
+        let multiplePersonWarnings = 0;
+        let modelsLoaded = false;
+        let isInitialPhotoTaken = false;
+        
+        // Lip movement detection variables - RESPONSIVE DETECTION
+        let lipMovementDetectionInterval = null;
+        let lipMovementWarnings = 0;
+        let previousLipLandmarks = null;
+        let lipMovementThreshold = 0.1; // More sensitive for lip movement detection
+        let consecutiveLipMovements = 0;
+        let maxConsecutiveLipMovements = 3; // Max consecutive detections before warning
+        
+        // Load face detection models
+        async function loadFaceDetectionModels() {
+            try {
+                console.log('Loading face detection models...');
+                
+                // Check if faceapi is available
+                if (typeof faceapi === 'undefined') {
+                    console.error('Face-api.js not loaded');
+                    showWarning('Face detection library not available. Using basic monitoring.', 'warning');
+                    return false;
+                }
+                
+                // Load models with timeout
+                const modelLoadPromises = [
+                    faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights'),
+                    faceapi.nets.faceLandmark68Net.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights'),
+                    faceapi.nets.faceRecognitionNet.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/weights')
+                ];
+                
+                await Promise.all(modelLoadPromises);
+                modelsLoaded = true;
+                console.log('Face detection models loaded successfully');
+                
+                // Update UI status
+                const faceDetectionStatus = document.getElementById('faceDetectionStatus');
+                if (faceDetectionStatus) {
+                    faceDetectionStatus.textContent = '🔄 Loading models...';
+                    faceDetectionStatus.style.color = '#0d6efd';
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error loading face detection models:', error);
+                showWarning('Face detection models failed to load. Using basic monitoring.', 'warning');
+                
+                // Update UI status
+                const faceDetectionStatus = document.getElementById('faceDetectionStatus');
+                if (faceDetectionStatus) {
+                    faceDetectionStatus.textContent = '⚠️ Basic monitoring';
+                    faceDetectionStatus.style.color = '#ffc107';
+                }
+                
+                return false;
+            }
+        }
+        
+        // Start advanced monitoring system
+        function startAdvancedMonitoring() {
+            if (!videoStream) {
+                console.error('No video stream available for monitoring');
+                return;
+            }
+            
+            console.log('Starting advanced monitoring system...');
+            
+            // Take initial photo secretly
+            setTimeout(() => {
+                takeInitialPhoto();
+            }, 2000); // Wait 2 seconds for camera to stabilize
+            
+            // Start face detection monitoring every 2 seconds
+            faceDetectionInterval = setInterval(() => {
+                if (!isSessionActive || !isInitialPhotoTaken) return;
+                monitorFaceDetection();
+            }, 2000);
+            
+            // Start background monitoring every 2 seconds for more responsive detection
+            backgroundMonitoringInterval = setInterval(() => {
+                if (!isSessionActive) return;
+                monitorBackground();
+            }, 2000);
+            
+
+            
+            // Start lip movement detection every 500ms for precise monitoring
+            lipMovementDetectionInterval = setInterval(() => {
+                if (!isSessionActive) return;
+                detectLipMovement();
+            }, 500);
+            
+            // Start real gaze detection
+            startRealGazeDetection();
+            
+            console.log('Advanced monitoring system started');
+        }
+        
+        // Take initial photo secretly
+        function takeInitialPhoto() {
+            try {
+                const video = document.getElementById('cameraFeed');
+                if (!video || !video.srcObject) {
+                    console.error('Video not available for initial photo');
+                    return;
+                }
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0);
+                
+                // Check if the captured image has content
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                let hasContent = false;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    
+                    // Check for non-black content
+                    if (r > 10 || g > 10 || b > 10) {
+                        hasContent = true;
+                        break;
+                    }
+                }
+                
+                if (!hasContent) {
+                    console.warn('Initial photo appears to be blank or black');
+                    showWarning('Camera may not be working properly. Please check your camera.', 'warning');
+                }
+                
+                initialFaceImage = canvas.toDataURL('image/jpeg', 0.8);
+                isInitialPhotoTaken = true;
+                console.log('Initial photo taken successfully');
+                
+                // Update UI status
+                const faceDetectionStatus = document.getElementById('faceDetectionStatus');
+                if (faceDetectionStatus) {
+                    faceDetectionStatus.textContent = '✅ Active';
+                    faceDetectionStatus.style.color = '#198754';
+                }
+                
+
+                
+            } catch (error) {
+                console.error('Error taking initial photo:', error);
+                showWarning('Error initializing camera monitoring. Please refresh the page.', 'danger');
+            }
+        }
+        
+        // Monitor face detection and compare with initial photo
+        async function monitorFaceDetection() {
+            if (!initialFaceImage) {
+                console.log('Initial photo not taken yet, skipping face detection');
+                return;
+            }
+            
+            try {
+                const video = document.getElementById('cameraFeed');
+                if (!video || !video.srcObject) {
+                    console.log('Video not available for face detection');
+                    return;
+                }
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0);
+                
+                // Use basic monitoring if face-api is not loaded
+                if (!modelsLoaded || typeof faceapi === 'undefined') {
+                    // Basic monitoring: check if video is active and has content
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    
+                    // Check if video has meaningful content (not just black/white)
+                    let hasContent = false;
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+                        
+                        // Check for non-black, non-white content
+                        if ((r > 10 || g > 10 || b > 10) && (r < 245 || g < 245 || b < 245)) {
+                            hasContent = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!hasContent) {
+                        handleFaceMismatch('No video content detected');
+                    }
+                    return;
+                }
+                
+                // Advanced face detection with face-api
+                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+                    .withFaceLandmarks();
+                
+                if (detections.length === 0) {
+                    // No face detected
+                    handleFaceMismatch('No face detected');
+                    return;
+                }
+                
+                if (detections.length > 1) {
+                    // Multiple faces detected
+                    handleMultiplePersons();
+                    return;
+                }
+                
+                // Compare with initial photo
+                const currentImage = canvas.toDataURL('image/jpeg', 0.8);
+                const similarity = await compareFaces(initialFaceImage, currentImage);
+                
+                if (similarity < 0.6) { // Threshold for face similarity
+                    handleFaceMismatch('Face mismatch detected');
+                }
+                
+            } catch (error) {
+                console.error('Error in face detection monitoring:', error);
+                // Fallback to basic monitoring
+                handleFaceMismatch('Face detection error');
+            }
+        }
+        
+        // Compare two face images
+        async function compareFaces(image1, image2) {
+            try {
+                // Simple comparison using image data
+                const img1 = new Image();
+                const img2 = new Image();
+                
+                return new Promise((resolve) => {
+                    img1.onload = () => {
+                        img2.onload = () => {
+                            const canvas1 = document.createElement('canvas');
+                            const canvas2 = document.createElement('canvas');
+                            const ctx1 = canvas1.getContext('2d');
+                            const ctx2 = canvas2.getContext('2d');
+                            
+                            canvas1.width = 100;
+                            canvas1.height = 100;
+                            canvas2.width = 100;
+                            canvas2.height = 100;
+                            
+                            ctx1.drawImage(img1, 0, 0, 100, 100);
+                            ctx2.drawImage(img2, 0, 0, 100, 100);
+                            
+                            const data1 = ctx1.getImageData(0, 0, 100, 100).data;
+                            const data2 = ctx2.getImageData(0, 0, 100, 100).data;
+                            
+                            let similarity = 0;
+                            for (let i = 0; i < data1.length; i += 4) {
+                                const diff = Math.abs(data1[i] - data2[i]) + 
+                                           Math.abs(data1[i+1] - data2[i+1]) + 
+                                           Math.abs(data1[i+2] - data2[i+2]);
+                                similarity += (255 * 3 - diff) / (255 * 3);
+                            }
+                            
+                            similarity = similarity / (data1.length / 4);
+                            resolve(similarity);
+                        };
+                        img2.src = image2;
+                    };
+                    img1.src = image1;
+                });
+            } catch (error) {
+                console.error('Error comparing faces:', error);
+                return 0.5; // Default similarity
+            }
+        }
+        
+        // Handle face mismatch
+        function handleFaceMismatch(reason) {
+            faceMismatchWarnings++;
+            totalViolations++;
+            
+            console.log(`Face mismatch: ${reason}. Warning ${faceMismatchWarnings}/2`);
+            
+            // Update UI status
+            const faceDetectionStatus = document.getElementById('faceDetectionStatus');
+            if (faceDetectionStatus) {
+                faceDetectionStatus.textContent = `⚠️ Warning ${faceMismatchWarnings}/2`;
+                faceDetectionStatus.style.color = faceMismatchWarnings >= 2 ? '#dc3545' : '#ffc107';
+            }
+            
+            if (faceMismatchWarnings >= 2) {
+                showWarning(`Face mismatch detected! Maximum warnings reached. You will be disqualified.`, 'danger');
+                setTimeout(() => {
+                    blockUserForCheating('Multiple face mismatch violations');
+                }, 2000);
+            } else {
+                showWarning(`Face mismatch detected! Warning ${faceMismatchWarnings}/2. Please ensure you are the only person visible.`, 'warning');
+            }
+        }
+        
+        // Handle multiple persons
+        function handleMultiplePersons() {
+            multiplePersonWarnings++;
+            totalViolations++;
+            
+            console.log(`Multiple persons detected. Warning ${multiplePersonWarnings}/2`);
+            
+            // Update UI status
+            const backgroundStatus = document.getElementById('backgroundStatus');
+            if (backgroundStatus) {
+                backgroundStatus.textContent = `⚠️ Multiple persons ${multiplePersonWarnings}/2`;
+                backgroundStatus.style.color = multiplePersonWarnings >= 2 ? '#dc3545' : '#ffc107';
+            }
+            
+            if (multiplePersonWarnings >= 2) {
+                showWarning(`Multiple persons detected! Maximum warnings reached. You will be disqualified.`, 'danger');
+                setTimeout(() => {
+                    blockUserForCheating('Multiple persons in camera view');
+                }, 2000);
+            } else {
+                showWarning(`Multiple persons detected! Warning ${multiplePersonWarnings}/2. Only you should be visible.`, 'warning');
+            }
+        }
+        
+        // Monitor background for screens and other violations
+        async function monitorBackground() {
+            try {
+                const video = document.getElementById('cameraFeed');
+                if (!video || !video.srcObject) {
+                    console.log('Video not available for background monitoring');
+                    return;
+                }
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0);
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                // Enhanced mobile phone and screen detection
+                let brightPixels = 0;
+                let darkPixels = 0;
+                let blueTintPixels = 0;
+                let rectangularObjects = 0;
+                let totalPixels = data.length / 4;
+                
+                // Analyze each pixel for various phone/screen characteristics
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    
+                    // Check for bright white areas (phone screens)
+                    if (r > 180 && g > 180 && b > 180) {
+                        brightPixels++;
+                    }
+                    
+                    // Check for dark areas (phone cases, bezels)
+                    if (r < 50 && g < 50 && b < 50) {
+                        darkPixels++;
+                    }
+                    
+                    // Check for blue tint (phone screens, especially OLED)
+                    if (b > r + 30 && b > g + 30) {
+                        blueTintPixels++;
+                    }
+                    
+                    // Check for rectangular patterns (phone shapes)
+                    if ((r > 150 && g > 150 && b > 150) || (r < 80 && g < 80 && b < 80)) {
+                        rectangularObjects++;
+                    }
+                }
+                
+                const brightPercentage = (brightPixels / totalPixels) * 100;
+                const darkPercentage = (darkPixels / totalPixels) * 100;
+                const blueTintPercentage = (blueTintPixels / totalPixels) * 100;
+                const rectangularPercentage = (rectangularObjects / totalPixels) * 100;
+                
+                console.log('Detection percentages:', {
+                    bright: brightPercentage.toFixed(2) + '%',
+                    dark: darkPercentage.toFixed(2) + '%',
+                    blueTint: blueTintPercentage.toFixed(2) + '%',
+                    rectangular: rectangularPercentage.toFixed(2) + '%'
+                });
+                
+
+                
+
+                
+                // Detect multiple faces only if face-api is loaded
+                if (modelsLoaded && typeof faceapi !== 'undefined') {
+                    try {
+                        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
+                        if (detections.length > 1) {
+                            handleMultiplePersons();
+                        }
+                    } catch (faceError) {
+                        console.error('Error in face detection during background monitoring:', faceError);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error in background monitoring:', error);
+            }
+        }
+        
+
+        
+
+        
+        // Precise lip movement detection function
+        async function detectLipMovement() {
+            try {
+                const video = document.getElementById('cameraFeed');
+                if (!video || !video.srcObject || !modelsLoaded || typeof faceapi === 'undefined') {
+                    return;
+                }
+                
+                // Detect face landmarks including lip points
+                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+                    .withFaceLandmarks();
+                
+                if (detections.length === 0) {
+                    // No face detected, reset lip movement tracking
+                    previousLipLandmarks = null;
+                    consecutiveLipMovements = 0;
+                    return;
+                }
+                
+                const face = detections[0];
+                const landmarks = face.landmarks;
+                
+                // Extract lip landmarks (points 48-68 in face-api.js)
+                const lipLandmarks = landmarks.positions.slice(48, 68);
+                
+                if (previousLipLandmarks) {
+                    // Calculate lip movement by comparing current and previous positions
+                    const movement = calculateLipMovement(lipLandmarks, previousLipLandmarks);
+                    
+                    if (movement > lipMovementThreshold) {
+                        consecutiveLipMovements++;
+                        console.log(`Lip movement detected: ${movement.toFixed(3)} (consecutive: ${consecutiveLipMovements})`);
+                        
+                        if (consecutiveLipMovements >= maxConsecutiveLipMovements) {
+                            handleLipMovementViolation();
+                            consecutiveLipMovements = 0; // Reset after warning
+                        }
+                    } else {
+                        // Reset consecutive count if no significant movement
+                        consecutiveLipMovements = Math.max(0, consecutiveLipMovements - 1);
+                    }
+                }
+                
+                // Store current landmarks for next comparison
+                previousLipLandmarks = lipLandmarks;
+                
+            } catch (error) {
+                console.error('Error in lip movement detection:', error);
+            }
+        }
+        
+        // Calculate lip movement between two sets of landmarks
+        function calculateLipMovement(currentLandmarks, previousLandmarks) {
+            if (!currentLandmarks || !previousLandmarks || currentLandmarks.length !== previousLandmarks.length) {
+                return 0;
+            }
+            
+            let totalMovement = 0;
+            let validPoints = 0;
+            
+            for (let i = 0; i < currentLandmarks.length; i++) {
+                const current = currentLandmarks[i];
+                const previous = previousLandmarks[i];
+                
+                if (current && previous) {
+                    const dx = current.x - previous.x;
+                    const dy = current.y - previous.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    totalMovement += distance;
+                    validPoints++;
+                }
+            }
+            
+            // Return average movement per point
+            return validPoints > 0 ? totalMovement / validPoints : 0;
+        }
+        
+        // Handle lip movement violation - RESPONSIVE DETECTION
+        function handleLipMovementViolation() {
+            lipMovementWarnings++;
+            totalViolations++;
+            
+            console.log(`Lip movement violation detected. Warning ${lipMovementWarnings}/3`);
+            
+            // Update UI status
+            const gazeWarningsElement = document.getElementById('gazeWarnings');
+            if (gazeWarningsElement) {
+                const currentWarnings = parseInt(gazeWarningsElement.textContent.split('/')[0]) || 0;
+                gazeWarningsElement.textContent = `${currentWarnings + 1}/5`;
+            }
+            
+            // Update lip movement status
+            const lipMovementStatus = document.getElementById('lipMovementStatus');
+            if (lipMovementStatus) {
+                lipMovementStatus.textContent = `⚠️ Warning ${lipMovementWarnings}/3`;
+                lipMovementStatus.style.color = lipMovementWarnings >= 3 ? '#dc3545' : '#ffc107';
+            }
+            
+            if (lipMovementWarnings >= 3) {
+                showWarning(`Excessive lip movement detected! Maximum warnings reached. You will be disqualified.`, 'danger');
+                setTimeout(() => {
+                    blockUserForCheating('Multiple lip movement violations');
+                }, 2000);
+            } else {
+                showWarning(`Lip movement detected! Warning ${lipMovementWarnings}/3. Please remain silent during the exam.`, 'warning');
+            }
+            
+            // Also trigger gaze violation for lip movement
+            handleGazeViolation();
+        }
+        
+        function startRealGazeDetection() {
+            if (!videoStream) return;
+            
+            // Process frames every 100ms for extremely responsive detection
+            frameProcessingInterval = setInterval(() => {
+                if (!isSessionActive) return;
+                
+                captureAndProcessFrame();
+            }, 100);
+        }
+        
+        function captureAndProcessFrame() {
+            const video = document.getElementById('cameraFeed');
+            const canvas = document.getElementById('gazeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Draw video frame to canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert canvas to base64
+            const frameData = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+            
+            // Send frame to server for processing
+            socket.emit('process_frame', {
+                session_id: sessionId,
+                frame_data: frameData
+            });
+            
+            // Debug: Log frame processing
+            console.log('Frame captured and sent for processing');
+        }
+        
+        function handleGazeViolation() {
+            if (!isSessionActive) return;
+            
+            // Trigger violation for any looking away (responsive detection)
+            const duration = gazeAwayStartTime ? Math.round((Date.now() - gazeAwayStartTime) / 1000) : 0;
+            
+            if (duration < 3) {
+                console.log('Gaze violation ignored - duration too short:', duration, 'seconds');
+                return;
+            }
+            
+            gazeWarnings++;
+            totalViolations++;
+            document.getElementById('gazeWarnings').textContent = `${gazeWarnings}/5`;
+            
+            socket.emit('gaze_violation', { 
+                session_id: sessionId,
+                duration: duration
+            });
+            
+            if (gazeWarnings >= MAX_GAZE_WARNINGS) {
+                showWarning(`Gaze violation detected! Maximum warnings reached. You will be blocked.`, 'danger');
+                setTimeout(() => {
+                    blockUserForCheating('Multiple gaze violations');
+                }, 2000);
+            } else {
+                showWarning(`Gaze violation detected! You looked away for ${duration}s. Warning ${gazeWarnings}/${MAX_GAZE_WARNINGS}`, 'warning');
+            }
+            
+            if (checkForBlocking('Gaze violations')) {
+                return;
+            }
+        }
+        
+        // Handle gaze updates from server
+        socket.on('gaze_update', (data) => {
+            console.log('Gaze update received:', data); // Debug logging
+            const gazeStatus = document.getElementById('gazeStatus');
+                const faceStatus = document.getElementById('faceStatus');
+            const gazeInfo = document.getElementById('gazeInfo');
+            
+            // Update face detection status
+            if (data.face_detected) {
+                    faceStatus.textContent = '✅ Face Detected';
+                    faceStatus.style.color = '#28a745';
+                
+                // Clear face not visible timer if it was running
+                if (faceNotVisibleStart) {
+                    faceNotVisibleStart = null;
+                    if (faceNotVisibleTimer) {
+                        clearInterval(faceNotVisibleTimer);
+                        faceNotVisibleTimer = null;
+                    }
+                }
+                } else {
+                // Face not detected
+                if (!faceNotVisibleStart) {
+                    faceNotVisibleStart = Date.now();
+                    startFaceNotVisibleTimer();
+                }
+            }
+            
+            // Update gaze status
+            if (data.gaze_data) {
+                const gazeDirection = data.gaze_data.gaze_direction;
+                const isLookingAtScreen = data.gaze_data.is_looking_at_screen;
+                const confidence = data.gaze_data.gaze_confidence;
+                
+                // Only process gaze data if face is detected and confidence is reasonable
+                if (!data.face_detected || confidence < 0.3) {
+                    gazeStatus.textContent = '🔍 Face not clear or low confidence';
+                    gazeStatus.style.color = '#ffc107';
+                    
+                    // Clear away timer if it was running
+                    if (gazeAwayStartTime) {
+                        gazeAwayStartTime = null;
+                        if (gazeAwayTimer) {
+                            clearInterval(gazeAwayTimer);
+                            gazeAwayTimer = null;
+                        }
+                    }
+                    return;
+                }
+                
+                if (isLookingAtScreen) {
+                    // Student is looking at screen
+                    gazeStatus.textContent = '✅ Looking at screen';
+                    gazeStatus.style.color = '#28a745';
+                    
+                    // Clear away timer if it was running
+                    if (gazeAwayStartTime) {
+                        gazeAwayStartTime = null;
+                        if (gazeAwayTimer) {
+                            clearInterval(gazeAwayTimer);
+                            gazeAwayTimer = null;
+                        }
+                    }
+                } else {
+                    // Student is looking away - detect slight movements and update warnings
+                    if (confidence > 0.6) { // Lower threshold for more responsive detection
+                        if (!gazeAwayStartTime) {
+                            gazeAwayStartTime = Date.now();
+                            // Start timer to show real-time away duration
+                            gazeAwayTimer = setInterval(() => {
+                                if (gazeAwayStartTime) {
+                                    const timeAway = Math.floor((Date.now() - gazeAwayStartTime) / 1000);
+                                    const minutes = Math.floor(timeAway / 60);
+                                    const seconds = timeAway % 60;
+                                    const timeText = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+                                    
+                                    // Responsive thresholds for slight movements
+                                    if (timeAway > 30) { // 30 seconds - looking down violation
+                                        gazeStatus.textContent = `🚨 LOOKING DOWN: ${timeText}`;
+                                        gazeStatus.style.color = '#dc3545';
+                                        handleGazeViolation();
+                                    } else if (timeAway > 20) { // 20 seconds - severe violation
+                                        gazeStatus.textContent = `🔴 SEVERE: Looking away (${timeText})`;
+                                        gazeStatus.style.color = '#dc3545';
+                                        handleGazeViolation();
+                                    } else if (timeAway > 10) { // 10 seconds - violation
+                                        gazeStatus.textContent = `🚨 VIOLATION: Looking away (${timeText})`;
+                                        gazeStatus.style.color = '#dc3545';
+                                        handleGazeViolation();
+                                    } else if (timeAway > 5) { // 5 seconds - warning
+                                        gazeStatus.textContent = `⚠️ WARNING: Looking away (${timeText})`;
+                                        gazeStatus.style.color = '#ffc107';
+                                        handleGazeViolation();
+                                    } else {
+                                        gazeStatus.textContent = `👀 Looking away (${timeText})`;
+                                        gazeStatus.style.color = '#6c757d';
+                                    }
+                                }
+                            }, 1000);
+                        }
+                    } else {
+                        // Lower confidence - don't trigger warnings, just show status
+                        gazeStatus.textContent = `🔍 Low confidence (${(confidence * 100).toFixed(1)}%)`;
+                        gazeStatus.style.color = '#ffc107';
+                        
+                        // Clear away timer if it was running
+                        if (gazeAwayStartTime) {
+                            gazeAwayStartTime = null;
+                            if (gazeAwayTimer) {
+                                clearInterval(gazeAwayTimer);
+                                gazeAwayTimer = null;
+                            }
+                        }
+                    }
+                }
+                
+                // Show detailed gaze information
+                gazeInfo.innerHTML = `
+                    Direction: ${gazeDirection}<br>
+                    Confidence: ${(confidence * 100).toFixed(1)}%<br>
+                    Looking at screen: ${isLookingAtScreen ? 'Yes' : 'No'}<br>
+                    <small style="color: #666;">
+                        ⚠️ Warning after 5s | 🚨 Violation after 10s | 🔴 Severe after 20s | 🚨 Looking Down after 30s | 👤 Face violation after 8s
+                    </small>
+                `;
+            } else {
+                gazeStatus.textContent = '🔍 Processing...';
+                gazeStatus.style.color = '#ffc107';
+                gazeInfo.innerHTML = 'Waiting for gaze data...';
+            }
+            
+            // Show error if any
+            if (data.error) {
+                console.error('Gaze detection error:', data.error);
+                gazeStatus.textContent = '❌ Error in gaze detection';
+                gazeStatus.style.color = '#dc3545';
+            }
+            // Gaze Detection UI update
+            updateGazeStatusBox(isLookingAtScreen);
+        });
+        
+        // Handle gaze warnings (non-violation warnings)
+        socket.on('gaze_warning', (data) => {
+            const duration = data.duration;
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+            const timeText = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+            
+            showWarning(`⚠️ You have been looking away for ${timeText}. Please focus on the screen.`, 'warning');
+            
+            // Update gaze status to show warning
+            const gazeStatus = document.getElementById('gazeStatus');
+            gazeStatus.textContent = `⚠️ Looking away (${timeText})`;
+            gazeStatus.style.color = '#ffc107';
+            
+            // Also update the gaze info to show warning
+            const gazeInfo = document.getElementById('gazeInfo');
+            if (gazeInfo.innerHTML.includes('Looking at screen: No')) {
+                gazeInfo.innerHTML += '<br><strong style="color: #ffc107;">⚠️ WARNING: Looking away too long!</strong>';
+            }
+        });
+        
+        // Handle face not visible warnings
+        let faceNotVisibleTimer = null;
+        let faceNotVisibleStart = null;
+        
+        function startFaceNotVisibleTimer() {
+            if (faceNotVisibleStart) {
+                faceNotVisibleTimer = setInterval(() => {
+                    if (faceNotVisibleStart) {
+                        const timeNotVisible = Math.floor((Date.now() - faceNotVisibleStart) / 1000);
+                        const faceStatus = document.getElementById('faceStatus');
+                        
+                        if (timeNotVisible > 5) {
+                            faceStatus.textContent = `🚨 FACE NOT VISIBLE (${timeNotVisible}s)`;
+                    faceStatus.style.color = '#dc3545';
+                        } else {
+                            faceStatus.textContent = `⚠️ Face Not Detected (${timeNotVisible}s)`;
+                            faceStatus.style.color = '#ffc107';
+                }
+                    }
+                }, 1000);
+            }
+        }
+        
+        // Timer
+        function updateTimer() {
+            if (!isSessionActive) return;
+            
+            const elapsed = Date.now() - examStartTime;
+            const hours = Math.floor(elapsed / 3600000);
+            const minutes = Math.floor((elapsed % 3600000) / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Warning system
+        function showWarning(message, type = 'warning') {
+            const warningContainer = document.getElementById('warningContainer');
+            const warningDiv = document.createElement('div');
+            warningDiv.className = `alert alert-${type} alert-dismissible fade show warning-alert`;
+            warningDiv.innerHTML = `
+                <strong>⚠️ Warning!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            warningContainer.appendChild(warningDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (warningDiv.parentNode) {
+                    warningDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        function terminateSession(reason) {
+            isSessionActive = false;
+            document.getElementById('statusIndicator').className = 'status-indicator status-danger';
+            document.getElementById('statusIndicator').textContent = '❌ Session Terminated';
+            
+            // Stop frame processing
+            if (frameProcessingInterval) {
+                clearInterval(frameProcessingInterval);
+            }
+            
+            // Stop gaze timer
+            if (gazeAwayTimer) {
+                clearInterval(gazeAwayTimer);
+            }
+            
+            // Stop face not visible timer
+            if (faceNotVisibleTimer) {
+                clearInterval(faceNotVisibleTimer);
+            }
+            
+            // Stop video stream
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+        
+        // Stop monitoring intervals
+        if (faceDetectionInterval) {
+            clearInterval(faceDetectionInterval);
+        }
+        if (backgroundMonitoringInterval) {
+            clearInterval(backgroundMonitoringInterval);
+        }
+
+        if (lipMovementDetectionInterval) {
+            clearInterval(lipMovementDetectionInterval);
+        }
+        
+        // Reset monitoring status
+                function resetMonitoringStatus() {
+            const faceDetectionStatus = document.getElementById('faceDetectionStatus');
+            const backgroundStatus = document.getElementById('backgroundStatus');
+            const lipMovementStatus = document.getElementById('lipMovementStatus');
+            
+            if (faceDetectionStatus) {
+                faceDetectionStatus.textContent = '✅ Active';
+                faceDetectionStatus.style.color = '#198754';
+            }
+            if (backgroundStatus) {
+                backgroundStatus.textContent = '🔄 Active';
+                backgroundStatus.style.color = '#0d6efd';
+            }
+            if (lipMovementStatus) {
+                lipMovementStatus.textContent = '🔄 Monitoring';
+                lipMovementStatus.style.color = '#0d6efd';
+            }
+            }
+            
+            showWarning(`Session terminated: ${reason}`, 'danger');
+            
+            setTimeout(() => {
+                alert('Your exam session has been terminated due to violations.');
+                window.location.href = '/';
+            }, 3000);
+        }
+        
+        function endSession() {
+            if (confirm('Are you sure you want to end this exam session?')) {
+                fetch(`/api/end_session/${sessionId}`, {
+                    method: 'POST'
+                }).then(() => {
+                    window.location.href = '/';
+                });
+            }
+        }
+        
+        function submitExam() {
+            if (confirm('Are you sure you want to submit your exam?')) {
+                alert('Exam submitted successfully!');
+                window.location.href = '/';
+            }
+        }
+        
+        function testGazeDetection() {
+            // Simulate a gaze violation for testing
+            console.log('Testing gaze detection...');
+            
+            // Force a gaze violation by sending test data
+            socket.emit('process_frame', {
+                session_id: sessionId,
+                frame_data: 'test_frame_data_for_gaze_violation'
+            });
+            
+            // Show test message
+            showWarning('🧪 Testing gaze detection system...', 'info');
+            
+            // Update status to show test
+            const gazeStatus = document.getElementById('gazeStatus');
+            gazeStatus.textContent = '🧪 Testing gaze detection...';
+            gazeStatus.style.color = '#17a2b8';
+        }
+        
+        // Socket event handlers
+        socket.on('connect', () => {
+            console.log('Connected to server');
+            socket.emit('join_session', { session_id: sessionId });
+        });
+        
+        // Verification result handlers
+        socket.on('mobile_phone_result', (data) => {
+            console.log('Mobile phone analysis result:', data);
+            const mobileStatus = document.getElementById('mobileStatus');
+            
+            if (data.has_mobile_phone) {
+                mobileStatus.textContent = '❌ Mobile phone detected! Please remove it.';
+                mobileStatus.className = 'step-status failed';
+                document.getElementById('step1').classList.add('failed');
+                addVerificationWarning('Mobile phone detected in camera view. Please remove it completely.');
+                verificationResults.mobile = false;
+            } else {
+                mobileStatus.textContent = '✅ No mobile phones detected';
+                mobileStatus.className = 'step-status success';
+                document.getElementById('step1').classList.add('completed');
+                verificationResults.mobile = true;
+            }
+            updateVerificationProgress();
+            
+            // Move to next check
+            setTimeout(() => checkElectronics(), 2000);
+        });
+        
+        socket.on('electronics_result', (data) => {
+            console.log('Electronics analysis result:', data);
+            const electronicsStatus = document.getElementById('electronicsStatus');
+            
+            if (data.has_electronics) {
+                electronicsStatus.textContent = '❌ Electronic devices detected!';
+                electronicsStatus.className = 'step-status failed';
+                document.getElementById('step2').classList.add('failed');
+                addVerificationWarning('Earphones, earbuds, or other electronic devices detected. Please remove them.');
+                verificationResults.electronics = false;
+            } else {
+                electronicsStatus.textContent = '✅ No electronic devices detected';
+                electronicsStatus.className = 'step-status success';
+                document.getElementById('step2').classList.add('completed');
+                verificationResults.electronics = true;
+            }
+            updateVerificationProgress();
+            
+            // Move to next check
+            setTimeout(() => checkBackgroundPeople(), 2000);
+        });
+        
+        socket.on('background_people_result', (data) => {
+            console.log('Background people analysis result:', data);
+            const peopleStatus = document.getElementById('peopleStatus');
+            
+            if (data.has_people) {
+                peopleStatus.textContent = '❌ Other people detected in background!';
+                peopleStatus.className = 'step-status failed';
+                document.getElementById('step3').classList.add('failed');
+                addVerificationWarning('Other people detected in the background. Please ensure you are alone.');
+                verificationResults.people = false;
+            } else {
+                peopleStatus.textContent = '✅ No other people detected';
+                peopleStatus.className = 'step-status success';
+                document.getElementById('step3').classList.add('completed');
+                verificationResults.people = true;
+            }
+            updateVerificationProgress();
+            
+            // Move to next check
+            setTimeout(() => checkTabSwitching(), 2000);
+        });
+        
+        socket.on('warning', (data) => {
+            showWarning(data.message, data.type === 'tab_switch' ? 'warning' : 'info');
+        });
+        
+        socket.on('session_terminated', (data) => {
+            terminateSession(data.reason);
+        });
+        
+        // New 3-Warning Verification System Socket Handlers
+        socket.on('mobile_check_result', (data) => {
+            console.log('Mobile phone check result:', data);
+            const mobileStatus = document.getElementById('mobileStatus');
+            
+            if (data.detected) {
+                verificationWarnings.mobile = data.warning_count;
+                mobileStatus.textContent = `❌ ${data.message}`;
+                mobileStatus.className = 'step-status failed';
+                document.getElementById('step1').classList.add('failed');
+                addVerificationWarning(data.message);
+                
+                // Check if we've reached 3 warnings
+                if (data.warning_count >= 3) {
+                    addVerificationWarning('❌ Mobile phone detected 3 times. Verification failed. Redirecting to login...');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 3000);
+                    return;
+                }
+                
+                // Repeat the mobile check until conditions are satisfied
+                addVerificationWarning(`📱 Mobile phone detected! Warning ${data.warning_count}/3. Please remove phone and follow instructions again.`);
+                checkUserCompliance('mobile');
+                setTimeout(() => {
+                    checkMobilePhone(); // Repeat the check
+                }, 3000);
+                
+                verificationResults.mobile = false;
+                // STOP here - don't proceed until mobile check passes
+                return;
+            } else {
+                verificationChecks.mobile = data.checks_completed;
+                mobileStatus.textContent = `✅ ${data.message}`;
+                mobileStatus.className = 'step-status success';
+                document.getElementById('step1').classList.add('completed');
+                verificationResults.mobile = true;
+                
+                // Only proceed to next step if mobile check passed
+                if (!recheckMode) {
+                    setTimeout(() => checkElectronics(), 2000);
+                }
+            }
+            updateVerificationProgress();
+        });
+        
+        // Debug socket events
+        socket.on('verification_started', (data) => {
+            console.log('Verification started:', data);
+        });
+        
+        socket.on('verification_error', (data) => {
+            console.error('Verification error:', data);
+            addVerificationWarning(`❌ Error: ${data.error}`, 'error');
+        });
+        
+        socket.on('electronics_check_result', (data) => {
+            console.log('Electronics check result:', data);
+            const electronicsStatus = document.getElementById('electronicsStatus');
+            
+            if (data.detected) {
+                verificationWarnings.electronics = data.warning_count;
+                electronicsStatus.textContent = `❌ ${data.message}`;
+                electronicsStatus.className = 'step-status failed';
+                document.getElementById('step2').classList.add('failed');
+                addVerificationWarning(data.message);
+                
+                // Check if we've reached 3 warnings
+                if (data.warning_count >= 3) {
+                    addVerificationWarning('❌ Electronics detected 3 times. Verification failed. Redirecting to login...');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 3000);
+                    return;
+                }
+                
+                // Repeat the electronics check until conditions are satisfied
+                addVerificationWarning(`🎧 Electronics detected! Warning ${data.warning_count}/3. Please remove earbuds/electronics and follow instructions again.`);
+                checkUserCompliance('electronics');
+                setTimeout(() => {
+                    checkElectronics(); // Repeat the check
+                }, 3000);
+                
+                verificationResults.electronics = false;
+                // STOP here - don't proceed until electronics check passes
+                return;
+            } else {
+                verificationChecks.electronics = data.checks_completed;
+                electronicsStatus.textContent = `✅ ${data.message}`;
+                electronicsStatus.className = 'step-status success';
+                document.getElementById('step2').classList.add('completed');
+                verificationResults.electronics = true;
+                
+                // Only proceed to next step if electronics check passed
+                if (!recheckMode) {
+                    setTimeout(() => checkBackgroundPeople(), 2000);
+                }
+            }
+            updateVerificationProgress();
+        });
+        
+        socket.on('people_check_result', (data) => {
+            console.log('Background people check result:', data);
+            const peopleStatus = document.getElementById('peopleStatus');
+            
+            if (data.detected) {
+                verificationWarnings.people = data.warning_count;
+                peopleStatus.textContent = `❌ ${data.message}`;
+                peopleStatus.className = 'step-status failed';
+                document.getElementById('step3').classList.add('failed');
+                addVerificationWarning(data.message);
+                
+                // Check if we've reached 3 warnings
+                if (data.warning_count >= 3) {
+                    addVerificationWarning('❌ Background people detected 3 times. Verification failed. Redirecting to login...');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 3000);
+                    return;
+                }
+                
+                // Repeat the people check until conditions are satisfied
+                addVerificationWarning(`👥 Background people detected! Warning ${data.warning_count}/3. Please ensure no one is behind you and follow instructions again.`);
+                checkUserCompliance('people');
+                setTimeout(() => {
+                    checkBackgroundPeople(); // Repeat the check
+                }, 3000);
+                
+                verificationResults.people = false;
+                // STOP here - don't proceed until people check passes
+                return;
+            } else {
+                verificationChecks.people = data.checks_completed;
+                peopleStatus.textContent = `✅ ${data.message}`;
+                peopleStatus.className = 'step-status success';
+                document.getElementById('step3').classList.add('completed');
+                verificationResults.people = true;
+                
+                // Only proceed to next step if people check passed
+                if (!recheckMode) {
+                    setTimeout(() => checkTabSwitching(), 2000);
+                }
+            }
+            updateVerificationProgress();
+        });
+        
+        socket.on('tab_check_result', (data) => {
+            console.log('Tab switching check result:', data);
+            const tabStatus = document.getElementById('tabStatus');
+            
+            if (data.detected) {
+                verificationWarnings.tabs = data.warning_count;
+                tabStatus.textContent = `❌ ${data.message}`;
+                tabStatus.className = 'step-status failed';
+                document.getElementById('step4').classList.add('failed');
+                addVerificationWarning(data.message);
+                
+                // Check if we've reached 3 warnings
+                if (data.warning_count >= 3) {
+                    addVerificationWarning('❌ Tab switching detected 3 times. Verification failed. Redirecting to login...');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 3000);
+                    return;
+                }
+                
+                // Repeat the tab check until conditions are satisfied
+                addVerificationWarning(`🖥️ Tab switching detected! Warning ${data.warning_count}/3. Please stay on this page and follow instructions again.`);
+                checkUserCompliance('tabs');
+                setTimeout(() => {
+                    checkTabSwitching(); // Repeat the check
+                }, 3000);
+                
+                verificationResults.tabs = false;
+                // STOP here - don't proceed until tab check passes
+                return;
+            } else {
+                verificationChecks.tabs = data.checks_completed;
+                tabStatus.textContent = `✅ ${data.message}`;
+                tabStatus.className = 'step-status success';
+                document.getElementById('step4').classList.add('completed');
+                verificationResults.tabs = true;
+                
+                // Complete verification if all steps passed
+                if (!recheckMode) {
+                    setTimeout(() => {
+                        completeVerification();
+                        socket.emit('complete_verification');
+                    }, 2000);
+                }
+            }
+            updateVerificationProgress();
+        });
+        
+        socket.on('verification_failed', (data) => {
+            console.log('Verification failed:', data);
+            addVerificationWarning(`❌ ${data.message}`, 'error');
+            
+            // Redirect to login after 3 seconds
+            setTimeout(() => {
+                window.location.href = data.redirect;
+            }, 3000);
+        });
+        
+        socket.on('recheck_started', (data) => {
+            console.log('Recheck started:', data);
+            addVerificationWarning(`🔄 ${data.message}`, 'info');
+        });
+        
+        socket.on('verification_complete', (data) => {
+            console.log('Verification completed:', data);
+            document.getElementById('startExamBtn').disabled = false;
+            document.getElementById('startExamBtn').textContent = '✅ Start Exam';
+            addVerificationWarning('✅ Verification completed successfully!', 'success');
+        });
+        
+        // Heartbeat
+        setInterval(() => {
+            if (isSessionActive) {
+                socket.emit('heartbeat', { session_id: sessionId });
+            }
+        }, 30000);
+        
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initializeCamera();
+            setInterval(updateTimer, 1000);
+            initializeAnswerSelection();
+            startVerification();
+            // Block copy/cut and show warnings
+            let copyWarnings = 0;
+            function handleCopyCut(e) {
+              e.preventDefault();
+              copyWarnings++;
+              if (copyWarnings < 3) {
+                showWarning(`Copying or cutting is not allowed! Warning ${copyWarnings}/3`, 'danger');
+              } else if (copyWarnings === 3) {
+                showWarning('Copying or cutting is not allowed! Maximum warnings reached. Session will be terminated.', 'danger');
+                setTimeout(() => terminateSession('Maximum copy/cut warnings exceeded'), 1000);
+              }
+            }
+            document.body.addEventListener('copy', handleCopyCut);
+            document.body.addEventListener('cut', handleCopyCut);
+            // Block Ctrl+C and Ctrl+A
+            document.body.addEventListener('keydown', function(e) {
+              if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'a')) {
+                e.preventDefault();
+                copyWarnings++;
+                if (e.key.toLowerCase() === 'c') {
+                  showWarning(`Copying is not allowed! Warning ${copyWarnings}/3`, 'danger');
+                } else {
+                  showWarning(`Selecting all is not allowed! Warning ${copyWarnings}/3`, 'danger');
+                }
+                if (copyWarnings === 3) {
+                  showWarning('Maximum warnings reached. Session will be terminated.', 'danger');
+                  setTimeout(() => terminateSession('Maximum copy/cut warnings exceeded'), 1000);
+                }
+              }
+            });
+        });
+        // Stronger reload prevention
+        function blockReload(e) {
+            e.preventDefault();
+            e.returnValue = 'You cannot reload or leave the exam page until the exam is over.';
+            return 'You cannot reload or leave the exam page until the exam is over.';
+        }
+        function blockKeyReload(e) {
+            if ((e.key === 'F5') || (e.ctrlKey && e.key.toLowerCase() === 'r') || (e.metaKey && e.key.toLowerCase() === 'r')) {
+                e.preventDefault();
+                showWarning('You cannot reload or leave the exam page until the exam is over.', 'danger');
+            }
+        }
+        window.onbeforeunload = blockReload;
+        window.addEventListener('keydown', blockKeyReload, true);
+        
+        // Pre-Exam Verification System with 3-Warning System
+        let verificationWarnings = {
+            mobile: 0,
+            electronics: 0,
+            people: 0,
+            tabs: 0
+        };
+        let verificationChecks = {
+            mobile: 0,
+            electronics: 0,
+            people: 0,
+            tabs: 0
+        };
+        let currentCheckType = null;
+        let recheckMode = false;
+        
+        function startVerification() {
+            console.log('Starting pre-exam verification...');
+            
+            // Reset verification state
+            verificationWarnings = { mobile: 0, electronics: 0, people: 0, tabs: 0 };
+            verificationChecks = { mobile: 0, electronics: 0, people: 0, tabs: 0 };
+            recheckMode = false;
+            
+            updateVerificationTimer();
+            startVerificationChecks();
+        }
+        
+        function updateVerificationTimer() {
+            const minutes = Math.floor(verificationTime / 60);
+            const seconds = verificationTime % 60;
+            document.getElementById('verificationTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (verificationTime > 0) {
+                verificationTime--;
+                verificationTimer = setTimeout(updateVerificationTimer, 1000);
+            } else {
+                // Time's up - force verification completion or redirect
+                addVerificationWarning('⏰ Time limit reached! Completing verification with current status...');
+                completeVerification();
+            }
+        }
+        
+        function startVerificationChecks() {
+            // Start with mobile phone detection - others will be triggered sequentially
+            setTimeout(() => checkMobilePhone(), 2000);
+        }
+        
+        function checkMobilePhone() {
+            currentCheckType = 'mobile';
+            console.log('Starting mobile phone detection...');
+            const mobileStatus = document.getElementById('mobileStatus');
+            mobileStatus.textContent = '📱 Please show your hands clearly - move them slowly';
+            mobileStatus.className = 'step-status checking';
+            
+            // Add camera feed to verification modal
+            addCameraToVerification();
+            
+            // Guide user through hand movements with better instructions
+            let handCheckCount = 0;
+            let mobileDetected = false;
+            let attempts = 0;
+            const maxAttempts = 5; // Maximum attempts before forcing next step
+            
+            const handCheckInterval = setInterval(() => {
+                handCheckCount++;
+                attempts++;
+                
+                if (handCheckCount === 1) {
+                    mobileStatus.textContent = '📱 Please move your hands to the LEFT - show palms';
+                    addVerificationWarning('Move your hands to the left and show your palms clearly');
+                } else if (handCheckCount === 2) {
+                    mobileStatus.textContent = '📱 Please move your hands to the RIGHT - show palms';
+                    addVerificationWarning('Move your hands to the right and show your palms clearly');
+                } else if (handCheckCount === 3) {
+                    mobileStatus.textContent = '📱 Please show your hands PALMS UP - hold for 3 seconds';
+                    addVerificationWarning('Show your palms facing the camera and hold for 3 seconds');
+                } else if (handCheckCount === 4) {
+                    mobileStatus.textContent = '📱 Please show your hands PALMS DOWN - hold for 3 seconds';
+                    addVerificationWarning('Show the back of your hands to the camera and hold for 3 seconds');
+                } else if (handCheckCount === 5) {
+                    mobileStatus.textContent = '📱 Please show your hands OPEN - fingers spread';
+                    addVerificationWarning('Spread your fingers and show your hands are empty');
+                } else if (handCheckCount >= 6) {
+                    clearInterval(handCheckInterval);
+                    
+                    // Analyze camera feed for mobile phone detection
+                    analyzeForMobilePhone();
+                }
+            }, 4000); // Increased time for better detection
+        }
+        
+        function analyzeForMobilePhone() {
+            const mobileStatus = document.getElementById('mobileStatus');
+            mobileStatus.textContent = '🔍 Analyzing for mobile devices...';
+            
+            // Capture and analyze camera feed
+            const video = document.getElementById('cameraFeed');
+            const canvas = document.getElementById('gazeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Draw current frame to canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert to base64 with higher quality
+            const frameData = canvas.toDataURL('image/jpeg', 0.9);
+            
+            // Send frame for mobile phone analysis using new verification system
+            socket.emit('check_mobile_phone', {
+                frame: frameData
+            });
+            
+            // Show detailed analysis progress
+            let analysisSteps = 0;
+            const analysisInterval = setInterval(() => {
+                analysisSteps++;
+                if (analysisSteps === 1) {
+                    mobileStatus.textContent = '🔍 Scanning for mobile phones...';
+                } else if (analysisSteps === 2) {
+                    mobileStatus.textContent = '🔍 Checking for phone screens and bright areas...';
+                } else if (analysisSteps === 3) {
+                    mobileStatus.textContent = '🔍 Analyzing hand-held devices...';
+                } else if (analysisSteps >= 4) {
+                    clearInterval(analysisInterval);
+                    mobileStatus.textContent = '⏳ Processing detection results...';
+                }
+            }, 1000);
+        }
+        
+        function checkElectronics() {
+            currentCheckType = 'electronics';
+            console.log('Starting electronics detection...');
+            const electronicsStatus = document.getElementById('electronicsStatus');
+            electronicsStatus.textContent = '🎧 Please show your ears clearly - remove any earbuds or earphones';
+            electronicsStatus.className = 'step-status checking';
+            
+            // Guide user through head/ear movements with specific focus on earbuds
+            let headCheckCount = 0;
+            const headCheckInterval = setInterval(() => {
+                headCheckCount++;
+                
+                if (headCheckCount === 1) {
+                    electronicsStatus.textContent = '🎧 Please turn your head to the LEFT - show your left ear clearly';
+                    addVerificationWarning('Turn your head to the left and hold for 4 seconds. Make sure your left ear is clearly visible and empty.');
+                } else if (headCheckCount === 2) {
+                    electronicsStatus.textContent = '🎧 Please turn your head to the RIGHT - show your right ear clearly';
+                    addVerificationWarning('Turn your head to the right and hold for 4 seconds. Make sure your right ear is clearly visible and empty.');
+                } else if (headCheckCount === 3) {
+                    electronicsStatus.textContent = '🎧 Please tilt your head UP - show your neck and ears';
+                    addVerificationWarning('Tilt your head up to show your neck and lower ear area. Hold for 4 seconds.');
+                } else if (headCheckCount === 4) {
+                    electronicsStatus.textContent = '🎧 Please show the back of your head - turn around slowly';
+                    addVerificationWarning('Turn around slowly to show the back of your head and neck area. Hold for 4 seconds.');
+                } else if (headCheckCount === 5) {
+                    electronicsStatus.textContent = '🎧 Please face forward and show both ears clearly';
+                    addVerificationWarning('Face the camera directly and show both ears clearly. Make sure no earbuds are visible in your ears.');
+                } else if (headCheckCount === 6) {
+                    electronicsStatus.textContent = '🎧 Please touch your ears to show they are empty';
+                    addVerificationWarning('Touch your ears with your fingers to show they are empty and no earbuds are present.');
+                } else if (headCheckCount === 7) {
+                    electronicsStatus.textContent = '🎧 Please pull back your hair to show ears clearly';
+                    addVerificationWarning('Pull back your hair to show your ears clearly. Make sure no earbuds are hidden.');
+                } else if (headCheckCount >= 8) {
+                    clearInterval(headCheckInterval);
+                    
+                    // Analyze camera feed for electronics detection
+                    analyzeForElectronics();
+                }
+            }, 5000); // Increased time for better detection
+        }
+        
+        function analyzeForElectronics() {
+            const electronicsStatus = document.getElementById('electronicsStatus');
+            electronicsStatus.textContent = '🔍 Analyzing for electronic devices...';
+            
+            // Capture and analyze camera feed
+            const video = document.getElementById('cameraFeed');
+            const canvas = document.getElementById('gazeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const frameData = canvas.toDataURL('image/jpeg', 0.9); // Higher quality for better detection
+            
+            // Send frame for electronics analysis using new verification system
+            socket.emit('check_electronics', {
+                frame: frameData
+            });
+            
+            // Show detailed analysis progress
+            let analysisSteps = 0;
+            const analysisInterval = setInterval(() => {
+                analysisSteps++;
+                if (analysisSteps === 1) {
+                    electronicsStatus.textContent = '🔍 Scanning for earbuds and earphones...';
+                } else if (analysisSteps === 2) {
+                    electronicsStatus.textContent = '🔍 Checking for headphone devices...';
+                } else if (analysisSteps === 3) {
+                    electronicsStatus.textContent = '🔍 Analyzing ear area for electronic devices...';
+                } else if (analysisSteps >= 4) {
+                    clearInterval(analysisInterval);
+                    electronicsStatus.textContent = '⏳ Processing detection results...';
+                }
+            }, 1000);
+        }
+        
+        function checkBackgroundPeople() {
+            currentCheckType = 'people';
+            console.log('Starting background people detection...');
+            const peopleStatus = document.getElementById('peopleStatus');
+            peopleStatus.textContent = '👥 Please show your full room view';
+            peopleStatus.className = 'step-status checking';
+            
+            // Guide user through room scanning
+            let roomCheckCount = 0;
+            const roomCheckInterval = setInterval(() => {
+                roomCheckCount++;
+                
+                if (roomCheckCount === 1) {
+                    peopleStatus.textContent = '👥 Please turn camera to the LEFT side of room';
+                    addVerificationWarning('Slowly turn your camera to show the left side of your room');
+                } else if (roomCheckCount === 2) {
+                    peopleStatus.textContent = '👥 Please turn camera to the RIGHT side of room';
+                    addVerificationWarning('Slowly turn your camera to show the right side of your room');
+                } else if (roomCheckCount === 3) {
+                    peopleStatus.textContent = '👥 Please show the BEHIND you area';
+                    addVerificationWarning('Turn around to show what is behind you');
+                } else if (roomCheckCount === 4) {
+                    peopleStatus.textContent = '👥 Please show the ABOVE you area';
+                    addVerificationWarning('Point camera upward to show ceiling/upper area');
+                } else if (roomCheckCount >= 5) {
+                    clearInterval(roomCheckInterval);
+                    
+                    // Analyze camera feed for people detection
+                    analyzeForBackgroundPeople();
+                }
+            }, 4000); // Longer time for room scanning
+        }
+        
+        function analyzeForBackgroundPeople() {
+            const peopleStatus = document.getElementById('peopleStatus');
+            peopleStatus.textContent = '🔍 Analyzing room for other people...';
+            
+            // Capture and analyze camera feed
+            const video = document.getElementById('cameraFeed');
+            const canvas = document.getElementById('gazeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const frameData = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Send frame for people analysis using new verification system
+            socket.emit('check_background_people', {
+                frame: frameData
+            });
+            
+            // Show analysis progress
+            let analysisSteps = 0;
+            const analysisInterval = setInterval(() => {
+                analysisSteps++;
+                if (analysisSteps === 1) {
+                    peopleStatus.textContent = '🔍 Scanning room for other people...';
+                } else if (analysisSteps === 2) {
+                    peopleStatus.textContent = '🔍 Checking background areas...';
+                } else if (analysisSteps === 3) {
+                    peopleStatus.textContent = '🔍 Analyzing for multiple people...';
+                } else if (analysisSteps >= 4) {
+                    clearInterval(analysisInterval);
+                    peopleStatus.textContent = '⏳ Processing detection results...';
+                }
+            }, 1000);
+        }
+        
+        function checkTabSwitching() {
+            currentCheckType = 'tabs';
+            console.log('Starting tab switching detection...');
+            const tabStatus = document.getElementById('tabStatus');
+            tabStatus.textContent = '🖥️ Please stay on this page and do not switch tabs';
+            tabStatus.className = 'step-status checking';
+            
+            // Monitor for tab switching during verification
+            let tabSwitchCount = 0;
+            const tabSwitchListener = () => {
+                tabSwitchCount++;
+                if (tabSwitchCount > 2) {
+                    tabStatus.textContent = '❌ Tab switching detected!';
+                    tabStatus.className = 'step-status failed';
+                    document.getElementById('step4').classList.add('failed');
+                    addVerificationWarning('Tab switching detected during verification. Please stay on this page.');
+                    verificationResults.tabs = false;
+                    document.removeEventListener('visibilitychange', tabSwitchListener);
+                } else {
+                    tabStatus.textContent = `⚠️ Tab switch detected (${tabSwitchCount}/2 allowed)`;
+                    addVerificationWarning(`Tab switch detected. You have ${3 - tabSwitchCount} more switches allowed.`);
+                }
+            };
+            
+            document.addEventListener('visibilitychange', tabSwitchListener);
+            
+            // Complete tab check after 10 seconds
+            setTimeout(() => {
+                if (tabSwitchCount <= 2) {
+                    tabStatus.textContent = '✅ No excessive tab switching detected';
+                    tabStatus.className = 'step-status success';
+                    document.getElementById('step4').classList.add('completed');
+                    verificationResults.tabs = true;
+                }
+                document.removeEventListener('visibilitychange', tabSwitchListener);
+                updateVerificationProgress();
+                
+                // Send tab switching check to server
+                socket.emit('check_tab_switching', { tab_switched: tabSwitchCount > 0 });
+            }, 10000);
+        }
+        
+        function updateVerificationProgress() {
+            const completed = Object.values(verificationResults).filter(Boolean).length;
+            const total = Object.keys(verificationResults).length;
+            const progress = (completed / total) * 100;
+            
+            document.getElementById('verificationProgress').style.width = progress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+            
+            // Enable start exam button if all checks pass
+            if (completed === total) {
+                document.getElementById('startExamBtn').disabled = false;
+                document.getElementById('startExamBtn').textContent = '✅ Start Exam';
+            }
+        }
+        
+        function addVerificationWarning(message) {
+            const warningsContainer = document.getElementById('verificationWarnings');
+            
+            // Check if this warning already exists to prevent duplicates
+            const existingWarnings = warningsContainer.querySelectorAll('.verification-warning');
+            for (let warning of existingWarnings) {
+                if (warning.textContent.includes(message)) {
+                    return; // Don't add duplicate warnings
+                }
+            }
+            
+            const warning = document.createElement('div');
+            warning.className = 'verification-warning';
+            warning.innerHTML = `⚠️ ${message}`;
+            warningsContainer.appendChild(warning);
+            
+            // Auto-remove warnings after 8 seconds
+            setTimeout(() => {
+                if (warning.parentNode) {
+                    warning.remove();
+                }
+            }, 8000);
+        }
+        
+        function recheckViolation(type) {
+            recheckMode = true;
+            currentCheckType = type;
+            
+            // Show recheck message
+            addVerificationWarning(`🔄 Rechecking ${type}... Please follow the instructions.`, 'info');
+            
+            // Reset the specific check
+            socket.emit('recheck_violation', { type: type });
+            
+            // Reset recheck mode after a delay
+            setTimeout(() => {
+                recheckMode = false;
+            }, 5000);
+            
+            // Perform the check again after a short delay
+            setTimeout(() => {
+                switch(type) {
+                    case 'mobile':
+                        checkMobilePhone();
+                        break;
+                    case 'electronics':
+                        checkElectronics();
+                        break;
+                    case 'people':
+                        checkBackgroundPeople();
+                        break;
+                    case 'tabs':
+                        checkTabSwitching();
+                        break;
+                }
+            }, 2000);
+        }
+        
+        function completeVerification() {
+            console.log('Verification completed');
+            if (verificationTimer) {
+                clearTimeout(verificationTimer);
+            }
+            
+            // Check if all verification steps passed
+            const allPassed = Object.values(verificationResults).every(Boolean);
+            if (allPassed) {
+                const timerElement = document.getElementById('verificationTimer');
+                timerElement.textContent = '✅ Verification Complete';
+                timerElement.className = 'verification-timer complete';
+                
+                // Show success message
+                addVerificationWarning('✅ All verification steps completed successfully! Starting exam automatically...');
+                
+                // Automatically start the exam after 2 seconds
+                setTimeout(() => {
+                    document.getElementById('verificationModal').style.display = 'none';
+                    document.getElementById('examContent').style.display = 'block';
+                    startExam();
+                }, 2000);
+            } else {
+                // If any step failed, redirect to login
+                const timerElement = document.getElementById('verificationTimer');
+                timerElement.textContent = '❌ Verification Failed';
+                timerElement.className = 'verification-timer failed';
+                
+                addVerificationWarning('❌ Verification failed. Redirecting to login page...');
+                
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 3000);
+            }
+        }
+        
+        // Test function to manually trigger warnings
+        function testWarning(type) {
+            console.log(`Testing ${type} warning...`);
+            const video = document.getElementById('cameraFeed');
+            const canvas = document.getElementById('gazeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const frameData = canvas.toDataURL('image/jpeg', 0.9);
+            
+            switch(type) {
+                case 'mobile':
+                    socket.emit('check_mobile_phone', { frame: frameData });
+                    break;
+                case 'electronics':
+                    socket.emit('check_electronics', { frame: frameData });
+                    break;
+                case 'people':
+                    socket.emit('check_background_people', { frame: frameData });
+                    break;
+                case 'tabs':
+                    socket.emit('check_tab_switching', { tab_switched: true });
+                    break;
+            }
+        }
+        
+        // Function to check if user is following instructions
+        function checkUserCompliance(stepType) {
+            const timeLeft = verificationTime;
+            const minutesLeft = Math.floor(timeLeft / 60);
+            
+            if (minutesLeft < 1) {
+                addVerificationWarning('⏰ Less than 1 minute remaining! Please follow instructions quickly.');
+            }
+            
+            // Check if user has been stuck on a step for too long
+            const currentStep = document.querySelector(`#step${stepType === 'mobile' ? '1' : stepType === 'electronics' ? '2' : stepType === 'people' ? '3' : '4'}`);
+            if (currentStep && currentStep.classList.contains('failed')) {
+                addVerificationWarning(`⚠️ Please follow the instructions for ${stepType} detection. Time is running out!`);
+            }
+        }
+        
+        // Skip verification function removed - verification is mandatory
+        
+        function startExam() {
+            console.log('Starting exam...');
+            hideVerificationModal();
+            isVerificationMode = false;
+            examStartTime = Date.now();
+            
+            // Start the actual exam monitoring
+            if (frameProcessingInterval) {
+                clearInterval(frameProcessingInterval);
+            }
+            startRealGazeDetection();
+        }
+        
+        function addCameraToVerification() {
+            // Camera is already in the HTML structure, just connect the feed
+            const video = document.getElementById('cameraFeed');
+            const verificationVideo = document.getElementById('verificationCamera');
+            
+            if (video && video.srcObject && verificationVideo) {
+                verificationVideo.srcObject = video.srcObject;
+                console.log('Camera feed connected to verification modal');
+            }
+        }
+        
+        function hideVerificationModal() {
+            const modal = document.getElementById('verificationModal');
+            modal.style.display = 'none';
+        }
+        
+        // Interactive answer selection
+        function initializeAnswerSelection() {
+            const answerOptions = document.querySelectorAll('.answer-option');
+            
+            answerOptions.forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                const label = option.querySelector('label');
+                
+                // Handle click on the entire option
+                option.addEventListener('click', () => {
+                    // Remove selected class from all options in the same group
+                    const name = radio.name;
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                        input.closest('.answer-option').classList.remove('selected');
+                    });
+                    
+                    // Select this option
+                    radio.checked = true;
+                    option.classList.add('selected');
+                    
+                    // Add visual feedback with English-inspired animation
+                    option.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        option.style.transform = '';
+                    }, 200);
+                });
+                
+                // Handle keyboard navigation
+                label.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        option.click();
+                    }
+                });
+            });
+        }
+        
+        // Prevent right-click
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // Prevent keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.altKey || e.metaKey) {
+                e.preventDefault();
+            }
+        });
+
+        function renderQuestion() {
+          const q = currentQuestion;
+          questionStartTime = Date.now();
+          // Progress bar
+          let progressPercent = Math.round((currentIndex / totalQuestions) * 100);
+          let progressHtml = `<div class='progress-container mb-3'>
+            <div class='d-flex justify-content-between align-items-center mb-2'>
+              <span style='font-weight: 600; color: #2c3e50;'>Progress</span>
+              <span style='color: #667eea; font-weight: 600;'>${currentIndex}/${totalQuestions} Questions</span>
+            </div>
+            <div class='progress' style='height: 8px;'>
+              <div class='progress-bar bg-gradient' role='progressbar' style='width: ${progressPercent}%; background: linear-gradient(90deg, #764ba2, #667eea);'></div>
+            </div>
+          </div>`;
+          document.getElementById('progressContainer').innerHTML = progressHtml;
+          // Question
+          let html = `<div class='exam-question'>
+            <h4>Q${currentIndex}. ${q.question}</h4>
+            <form id='answerForm'>`;
+          const opts = q.options || q.options;
+          for (const key in opts) {
+            html += `<div class='answer-option'>
+              <input type='radio' name='answer' id='opt${key}' value='${key}' required>
+              <label for='opt${key}'>${opts[key]}</label>
+            </div>`;
+          }
+          html += `</form></div>`;
+          document.getElementById('questionContainer').innerHTML = html;
+        }
+
+        // --- Minimal robust dynamic exam logic ---
+        let currentQuestion = null;
+        let currentIndex = 0;
+        let totalQuestions = 60;
+        let questionStartTime = null;
+        let answers = [];
+
+        async function fetchNextQuestion() {
+          const res = await fetch(`/api/next_question/${sessionId}`);
+          const data = await res.json();
+          if (data.done) {
+            window.location.href = `/exam_analysis/${sessionId}`;
+            return;
+          }
+          currentQuestion = data.question;
+          currentIndex = data.index;
+          totalQuestions = data.total;
+          renderQuestion();
+        }
+
+        function renderQuestion() {
+          if (!currentQuestion) return;
+          questionStartTime = Date.now();
+          let progressPercent = Math.round(((currentIndex-1) / totalQuestions) * 100);
+          let progressHtml = `<div class='progress-container mb-3'>
+            <div class='d-flex justify-content-between align-items-center mb-2'>
+              <span style='font-weight: 600; color: #2c3e50;'>Progress</span>
+              <span style='font-weight: 600; color: #495057;'>${currentIndex}/${totalQuestions} Questions &nbsp;|&nbsp; ${progressPercent}%</span>
+            </div>
+            <div class='progress'>
+              <div class='progress-bar bg-gradient' role='progressbar' style='width: ${progressPercent}%; transition: width 0.4s cubic-bezier(.4,0,.2,1);'></div>
+            </div>
+          </div>`;
+          document.getElementById('progressContainer').innerHTML = progressHtml;
+          // Question
+          let html = `<div class='exam-question'>
+            <h4>Q${currentIndex}. ${currentQuestion.question}</h4>
+            <form id='answerForm'>`;
+          const opts = currentQuestion.options;
+          for (const key in opts) {
+            html += `<div class='answer-option'>
+              <input type='radio' name='answer' id='opt${key}' value='${key}'>
+              <label for='opt${key}'>${opts[key]}</label>
+            </div>`;
+          }
+          html += `</form></div>`;
+          document.getElementById('questionContainer').innerHTML = html;
+          let btn = document.createElement('button');
+          btn.className = 'adv-next-btn mt-3';
+          btn.textContent = (currentIndex === totalQuestions) ? 'Submit Exam' : 'Next';
+          btn.onclick = submitAnswer;
+          document.getElementById('questionContainer').appendChild(btn);
+          
+          // Initialize answer selection with highlighting
+          initializeAnswerSelection();
+        }
+
+        async function submitAnswer(e) {
+          if (e) e.preventDefault();
+          const form = document.getElementById('answerForm');
+          const formData = new FormData(form);
+          const selected = formData.get('answer') || null;
+          const timeTaken = Math.floor((Date.now() - questionStartTime) / 1000);
+          answers.push({
+            question_id: currentQuestion.id,
+            selected,
+            time_taken: timeTaken
+          });
+          await fetch(`/api/submit_answer/${sessionId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ selected, time_taken: timeTaken })
+          });
+          // If this was the last question, allow navigation
+          if (currentIndex === totalQuestions) {
+            window.onbeforeunload = null;
+          }
+          fetchNextQuestion();
+        }
+
+        // Check if current user is blocked
+        async function checkIfUserBlocked() {
+            try {
+                const userEmail = sessionStorage.getItem('userEmail');
+                const userUsername = sessionStorage.getItem('userUsername');
+                
+                if (userEmail && userUsername) {
+                    const response = await fetch('/api/check_blocked_status', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: userEmail, username: userUsername })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.is_blocked) {
+                        // User is blocked, redirect to violation page
+                        window.location.href = '/cheating_violation';
+                        return true;
+                    }
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking blocked status:', error);
+                return false;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Clear any existing blocked status for testing (remove this in production)
+            sessionStorage.removeItem('userBlocked');
+            
+            // Check if user is blocked before starting exam
+            const isBlocked = await checkIfUserBlocked();
+            if (!isBlocked) {
+                fetchNextQuestion();
+                
+                // Start periodic blocked user check
+                startBlockedUserCheck();
+            }
+        });
+        // --- End minimal robust dynamic exam logic ---
+
+        // Gaze Detection UI update
+        function updateGazeStatusBox(isLookingAtScreen) {
+          const circle = document.getElementById('gazeCircle');
+          const text = document.getElementById('gazeText');
+          // Add or update indicator
+          let indicator = document.getElementById('gazeStatusIndicator');
+          if (!indicator) {
+            indicator = document.createElement('span');
+            indicator.id = 'gazeStatusIndicator';
+            indicator.className = 'gaze-indicator';
+            text.parentNode.insertBefore(indicator, text);
+          }
+          if (isLookingAtScreen) {
+            circle.classList.remove('gaze-off');
+            text.textContent = 'Eyes on target 🎯';
+            text.style.color = '#38b000';
+            indicator.className = 'gaze-indicator gaze-indicator-green';
+          } else {
+            circle.classList.add('gaze-off');
+            text.textContent = 'Eyes off-course 👀';
+            text.style.color = '#e63946';
+            indicator.className = 'gaze-indicator gaze-indicator-red';
+          }
+        }
+
+        // Cheating detection and blocking system - RESPONSIVE BUT CONTROLLED
+        let totalViolations = 0;
+        const MAX_VIOLATIONS = 5; // Total violations before blocking
+        const MAX_COPY_WARNINGS = 3; // Copy warnings
+        const MAX_TAB_WARNINGS = 3; // Tab switching warnings
+        const MAX_GAZE_WARNINGS = 5; // Gaze warnings
+        
+        // Get current user info from session storage or URL params
+        function getCurrentUserInfo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = window.location.pathname.split('/').pop();
+            // You might need to store user info in session storage during login
+            return {
+                email: sessionStorage.getItem('userEmail') || 'unknown@example.com',
+                username: sessionStorage.getItem('userUsername') || 'unknown_user'
+            };
+        }
+        
+        // Block user due to cheating
+        async function blockUserForCheating(reason) {
+            try {
+                console.log('Blocking user for cheating:', reason);
+                
+                // Store blocking info in sessionStorage for immediate access
+                sessionStorage.setItem('userBlocked', 'true');
+                sessionStorage.setItem('blockReason', reason);
+                sessionStorage.setItem('blockTime', Date.now().toString());
+                
+                const userInfo = getCurrentUserInfo();
+                
+                // Try to block user on server
+                const response = await fetch('/api/block_user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: userInfo.email,
+                        username: userInfo.username,
+                        reason: reason
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('User blocked successfully on server');
+                } else {
+                    console.error('Failed to block user on server, but continuing with local block');
+                }
+                
+                // Force redirect with multiple fallback methods
+                console.log('Redirecting to cheating violation page...');
+                
+                // Method 1: Direct redirect
+                try {
+                    window.location.href = '/cheating_violation';
+                } catch (redirectError) {
+                    console.error('Direct redirect failed:', redirectError);
+                    
+                    // Method 2: Replace location
+                    try {
+                        window.location.replace('/cheating_violation');
+                    } catch (replaceError) {
+                        console.error('Location replace failed:', replaceError);
+                        
+                        // Method 3: Assign location
+                        try {
+                            window.location.assign('/cheating_violation');
+                        } catch (assignError) {
+                            console.error('Location assign failed:', assignError);
+                            
+                            // Method 4: Force reload with new URL
+                            try {
+                                window.location = '/cheating_violation';
+                            } catch (finalError) {
+                                console.error('All redirect methods failed:', finalError);
+                                
+                                // Method 5: Create a link and click it
+                                const link = document.createElement('a');
+                                link.href = '/cheating_violation';
+                                link.style.display = 'none';
+                                document.body.appendChild(link);
+                                link.click();
+                            }
+                        }
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error in blockUserForCheating:', error);
+                
+                // Even if everything fails, try to redirect
+                try {
+                    window.location.href = '/cheating_violation';
+                } catch (finalRedirectError) {
+                    console.error('Final redirect attempt failed:', finalRedirectError);
+                    alert('You have been disqualified for cheating. Please close this browser and contact your administrator.');
+                }
+            }
+        }
+        
+        // Check if user should be blocked
+        function checkForBlocking(violationType) {
+            totalViolations++;
+            
+            if (totalViolations >= MAX_VIOLATIONS) {
+                const reason = `Multiple violations: ${violationType} and others`;
+                blockUserForCheating(reason);
+                return true;
+            }
+            return false;
+        }
+        
+        // Backup redirect system
+        function forceRedirectToViolation() {
+            console.log('Force redirecting to violation page...');
+            
+            // Store blocking info
+            sessionStorage.setItem('userBlocked', 'true');
+            sessionStorage.setItem('blockReason', 'Multiple violations detected');
+            sessionStorage.setItem('blockTime', Date.now().toString());
+            
+            // Multiple redirect attempts
+            try {
+                window.location.href = '/cheating_violation';
+            } catch (error) {
+                console.error('Force redirect failed:', error);
+                try {
+                    window.location.replace('/cheating_violation');
+                } catch (error2) {
+                    console.error('Force replace failed:', error2);
+                    try {
+                        window.location.assign('/cheating_violation');
+                    } catch (error3) {
+                        console.error('Force assign failed:', error3);
+                        alert('You have been disqualified. Please close this browser and contact your administrator.');
+                    }
+                }
+            }
+        }
+        
+        // Copy violation detection
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            copyWarnings++;
+            totalViolations++;
+            
+            if (copyWarnings < MAX_COPY_WARNINGS) {
+                showWarning(`Copying is not allowed! Warning ${copyWarnings}/${MAX_COPY_WARNINGS}`, 'danger');
+            } else if (copyWarnings >= MAX_COPY_WARNINGS) {
+                showWarning('Copying is not allowed! Maximum warnings reached. You will be blocked.', 'danger');
+                setTimeout(() => {
+                    blockUserForCheating('Multiple copy violations');
+                }, 2000);
+            }
+            
+            if (checkForBlocking('Copy violations')) {
+                return;
+            }
+        });
+        
+        // Cut violation detection
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            copyWarnings++;
+            totalViolations++;
+            
+            if (copyWarnings < MAX_COPY_WARNINGS) {
+                showWarning(`Cutting is not allowed! Warning ${copyWarnings}/${MAX_COPY_WARNINGS}`, 'danger');
+            } else if (copyWarnings >= MAX_COPY_WARNINGS) {
+                showWarning('Cutting is not allowed! Maximum warnings reached. You will be blocked.', 'danger');
+                setTimeout(() => {
+                    blockUserForCheating('Multiple cut violations');
+                }, 2000);
+            }
+            
+            if (checkForBlocking('Cut violations')) {
+                return;
+            }
+        });
+        
+        // Select all violation detection
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'a') {
+                e.preventDefault();
+                copyWarnings++;
+                totalViolations++;
+                
+                if (copyWarnings < MAX_COPY_WARNINGS) {
+                    showWarning(`Select all is not allowed! Warning ${copyWarnings}/${MAX_COPY_WARNINGS}`, 'danger');
+                } else if (copyWarnings >= MAX_COPY_WARNINGS) {
+                    showWarning('Select all is not allowed! Maximum warnings reached. You will be blocked.', 'danger');
+                    setTimeout(() => {
+                        blockUserForCheating('Multiple select all violations');
+                    }, 2000);
+                }
+                
+                if (checkForBlocking('Select all violations')) {
+                    return;
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

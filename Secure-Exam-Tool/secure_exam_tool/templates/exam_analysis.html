@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .analysis-card {
+            background: rgba(255,255,255,0.92);
+            border-radius: 28px;
+            box-shadow: 0 8px 40px 8px #8ec5fc33, 0 2px 8px #e0c3fc33;
+            padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+            max-width: 480px;
+            width: 98vw;
+            margin: 2rem auto;
+            position: relative;
+            border: 2.5px solid #e3f0ff;
+            backdrop-filter: blur(8px) saturate(120%);
+            text-align: center;
+            animation: fadeInUp 1.1s cubic-bezier(.4,0,.2,1);
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem auto;
+            box-shadow: 0 4px 24px #8ec5fc33;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #764ba2;
+            position: relative;
+            animation: popIn 1.2s cubic-bezier(.4,0,.2,1);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        .score-label {
+            font-size: 1.2rem;
+            color: #22223b;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+        }
+        .score-detail {
+            font-size: 1.08rem;
+            color: #4361ee;
+            margin-bottom: 1.2rem;
+        }
+        .analysis-bar {
+            width: 100%;
+            height: 18px;
+            background: #e3f0ff;
+            border-radius: 9px;
+            margin: 1.2rem 0 1.7rem 0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px #8ec5fc11;
+        }
+        .analysis-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #764ba2 0%, #8ec5fc 100%);
+            border-radius: 9px;
+            transition: width 1.2s cubic-bezier(.4,0,.2,1);
+        }
+        .btn-home {
+            background: linear-gradient(90deg, #8ec5fc 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.8rem 2.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 16px #8ec5fc33;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+        .btn-home:hover {
+            background: linear-gradient(90deg, #764ba2 0%, #8ec5fc 100%);
+            transform: scale(1.04);
+        }
+        /* Popup styles */
+        .popup-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(30,30,60,0.18);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInBg 0.5s;
+        }
+        @keyframes fadeInBg {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .popup {
+            background: rgba(255,255,255,0.98);
+            border-radius: 22px;
+            box-shadow: 0 8px 40px 8px #8ec5fc55, 0 2px 8px #e0c3fc33;
+            padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+            max-width: 400px;
+            width: 96vw;
+            text-align: center;
+            position: relative;
+            animation: popupBounce 0.8s cubic-bezier(.4,0,.2,1);
+        }
+        @keyframes popupBounce {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        .popup .congrats {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #38b000;
+            margin-bottom: 0.7rem;
+            letter-spacing: 0.01em;
+            animation: popIn 1.2s cubic-bezier(.4,0,.2,1);
+        }
+        .popup .desc {
+            font-size: 1.15rem;
+            color: #22223b;
+            margin-bottom: 1.2rem;
+        }
+        .popup .close-btn {
+            background: linear-gradient(90deg, #8ec5fc 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px #8ec5fc33;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+        .popup .close-btn:hover {
+            background: linear-gradient(90deg, #764ba2 0%, #8ec5fc 100%);
+            transform: scale(1.04);
+        }
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 1100;
+        }
+    </style>
+</head>
+<body>
+    <div class="analysis-card">
+        <div class="score-label">Your Score</div>
+        <div class="score-circle" id="scoreCircle">{{ score|round(2) }}%</div>
+        <div class="score-detail">Correct: <b>{{ correct }}</b> / {{ total }}</div>
+        <div class="analysis-bar">
+            <div class="analysis-bar-fill" id="barFill" style="width: 0%"></div>
+        </div>
+        <a href="/" class="btn btn-home mt-3">Back to Home</a>
+    </div>
+    {% if show_popup %}
+    <canvas class="confetti" id="confetti"></canvas>
+    <div class="popup-bg" id="popupBg">
+        <div class="popup">
+            <div class="congrats">🎉 Congratulations!</div>
+            <div class="desc">You are selected for the <b>Practical Round</b>.<br>We wish you the best for the next stage!</div>
+            <button class="close-btn" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+    {% endif %}
+    <script>
+        // Animate bar
+        window.onload = function() {
+            var percent = {{ score|round(2) }};
+            document.getElementById('barFill').style.width = percent + '%';
+        };
+        // Popup close (define globally)
+        function closePopup() {
+            var popupBg = document.getElementById('popupBg');
+            if (popupBg) {
+                popupBg.style.display = 'none';
+                popupBg.style.visibility = 'hidden';
+                popupBg.style.pointerEvents = 'none';
+            }
+            var confetti = document.getElementById('confetti');
+            if (confetti) {
+                confetti.style.display = 'none';
+                confetti.style.visibility = 'hidden';
+                confetti.style.pointerEvents = 'none';
+            }
+        }
+        // Confetti animation
+        {% if show_popup %}
+        // Simple confetti effect
+        function randomColor() {
+            var colors = ['#764ba2','#8ec5fc','#38b000','#ffe066','#e63946','#4361ee'];
+            return colors[Math.floor(Math.random()*colors.length)];
+        }
+        function confettiEffect() {
+            var canvas = document.getElementById('confetti');
+            var ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            var confs = [];
+            for (var i=0; i<120; i++) {
+                confs.push({
+                    x: Math.random()*canvas.width,
+                    y: Math.random()*canvas.height-100,
+                    r: Math.random()*7+4,
+                    d: Math.random()*Math.PI*2,
+                    color: randomColor(),
+                    tilt: Math.random()*10-5
+                });
+            }
+            function draw() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                for (var i=0; i<confs.length; i++) {
+                    var c = confs[i];
+                    ctx.beginPath();
+                    ctx.arc(c.x, c.y, c.r, 0, 2*Math.PI);
+                    ctx.fillStyle = c.color;
+                    ctx.globalAlpha = 0.85;
+                    ctx.fill();
+                }
+            }
+            function update() {
+                for (var i=0; i<confs.length; i++) {
+                    var c = confs[i];
+                    c.y += Math.cos(c.d)+2+c.r/2;
+                    c.x += Math.sin(c.d);
+                    if (c.y > canvas.height) {
+                        c.y = -10;
+                        c.x = Math.random()*canvas.width;
+                    }
+                }
+            }
+            function loop() {
+                draw();
+                update();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+        confettiEffect();
+        {% endif %}
+    </script>
+</body>
+</html> 

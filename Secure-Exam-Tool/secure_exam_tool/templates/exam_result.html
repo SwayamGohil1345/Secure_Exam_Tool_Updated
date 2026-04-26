@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        .result-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.25);
+            padding: 40px 30px 30px 30px;
+        }
+        .result-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #5a189a;
+            margin-bottom: 20px;
+        }
+        .metric-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .suggestion {
+            background: #f8f9fa;
+            border-left: 5px solid #764ba2;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: #5a189a;
+        }
+        .chart-container {
+            margin: 30px 0 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <div class="result-title text-center">Exam Analysis</div>
+        <div class="row mb-4">
+            <div class="col-6">
+                <div class="metric-label">Total Questions:</div>
+                <div id="totalQ" class="fs-4"></div>
+            </div>
+            <div class="col-6">
+                <div class="metric-label">Correct Answers:</div>
+                <div id="correctQ" class="fs-4 text-success"></div>
+            </div>
+            <div class="col-6 mt-3">
+                <div class="metric-label">Incorrect Answers:</div>
+                <div id="incorrectQ" class="fs-4 text-danger"></div>
+            </div>
+            <div class="col-6 mt-3">
+                <div class="metric-label">Average Time per Question:</div>
+                <div id="avgTime" class="fs-5"></div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="metric-label">Total Time Taken:</div>
+                <div id="totalTime" class="fs-5"></div>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="accuracyChart" height="80"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="difficultyChart" height="80"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="categoryChart" height="80"></canvas>
+        </div>
+        <div class="mt-4">
+            <div class="metric-label mb-2">Suggestions for Improvement:</div>
+            <div id="suggestions"></div>
+        </div>
+        <div class="mt-4">
+            <button class="btn btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#reviewTableCollapse" aria-expanded="false" aria-controls="reviewTableCollapse">
+                Show/Hide Per-Question Review
+            </button>
+            <div class="collapse" id="reviewTableCollapse">
+                <div class="card card-body">
+                    <div class="metric-label mb-2">Per-Question Review:</div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle" id="reviewTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Question</th>
+                                    <th>Your Answer</th>
+                                    <th>Correct Answer</th>
+                                    <th>Result</th>
+                                    <th>Time (s)</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-primary">Back to Home</a>
+        </div>
+        <div id="reviewSection" class="text-center mt-3" style="display:none;">
+            <button id="reviewBtn" class="btn btn-success">Review Interview Eligibility</button>
+        </div>
+        <div class="modal fade" id="interviewModal" tabindex="-1" aria-labelledby="interviewModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="interviewModalLabel">Interview Eligibility</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="interviewResultMsg"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}m ${sec}s`;
+        }
+        async function loadResult() {
+            const sessionId = window.location.pathname.split('/').pop();
+            const res = await fetch(`/api/exam_result/${sessionId}`);
+            const data = await res.json();
+            document.getElementById('totalQ').textContent = data.total;
+            document.getElementById('correctQ').textContent = data.correct;
+            document.getElementById('incorrectQ').textContent = data.incorrect;
+            document.getElementById('avgTime').textContent = formatTime(data.avg_time);
+            document.getElementById('totalTime').textContent = formatTime(data.total_time);
+            // Suggestions
+            const sugDiv = document.getElementById('suggestions');
+            sugDiv.innerHTML = '';
+            if (data.suggestions && data.suggestions.length > 0) {
+                data.suggestions.forEach(s => {
+                    const d = document.createElement('div');
+                    d.className = 'suggestion';
+                    d.textContent = s;
+                    sugDiv.appendChild(d);
+                });
+            } else {
+                sugDiv.innerHTML = '<div class="suggestion">Great job! Keep practicing to improve even more.</div>';
+            }
+            // Charts
+            renderCharts(data);
+            // Per-question review table
+            renderReviewTable(data.review);
+            // Show review button if eligible
+            const percent = (data.correct / data.total) * 100;
+            if (percent > 65) {
+                document.getElementById('reviewSection').style.display = '';
+                document.getElementById('reviewBtn').onclick = function() {
+                    document.getElementById('interviewResultMsg').innerHTML = '<span style="color: #38b000; font-weight:600; font-size:1.2rem;">🎉 Congratulations! You are selected for the interview round.</span>';
+                    var modal = new bootstrap.Modal(document.getElementById('interviewModal'));
+                    modal.show();
+                };
+            } else {
+                document.getElementById('reviewSection').style.display = '';
+                document.getElementById('reviewBtn').onclick = function() {
+                    document.getElementById('interviewResultMsg').innerHTML = '<span style="color: #e63946; font-weight:600; font-size:1.2rem;">Thank you for participating. You are not selected for the interview round.</span>';
+                    var modal = new bootstrap.Modal(document.getElementById('interviewModal'));
+                    modal.show();
+                };
+            }
+        }
+        function renderCharts(data) {
+            // Accuracy Pie
+            new Chart(document.getElementById('accuracyChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [data.correct, data.incorrect],
+                        backgroundColor: ['#38b000', '#e63946'],
+                        borderColor: ['#1b5e20', '#b71c1c'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: { legend: { position: 'bottom' } },
+                    cutout: '70%'
+                }
+            });
+            // Difficulty Bar
+            const diff = data.by_difficulty;
+            new Chart(document.getElementById('difficultyChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Easy', 'Moderate', 'Difficult'],
+                    datasets: [{
+                        label: 'Correct',
+                        data: [diff.easy.correct, diff.medium.correct, diff.hard.correct],
+                        backgroundColor: '#38b000',
+                        borderColor: '#1b5e20',
+                        borderWidth: 2
+                    }, {
+                        label: 'Total',
+                        data: [diff.easy.total, diff.medium.total, diff.hard.total],
+                        backgroundColor: '#bdb2ff',
+                        borderColor: '#333',
+                        borderWidth: 1,
+                        type: 'line',
+                        fill: false
+                    }]
+                },
+                options: {
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+            // Category Pie
+            const cat = data.by_category;
+            const catLabels = Object.keys(cat);
+            const catCorrect = catLabels.map(k => cat[k].correct);
+            new Chart(document.getElementById('categoryChart').getContext('2d'), {
+                type: 'pie',
+                data: {
+                    labels: catLabels,
+                    datasets: [{
+                        data: catCorrect,
+                        backgroundColor: [
+                            '#f72585','#b5179e','#7209b7','#560bad','#480ca8','#3a0ca3','#4361ee','#4cc9f0','#4895ef','#00b4d8'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+        function renderReviewTable(review) {
+            const tbody = document.querySelector('#reviewTable tbody');
+            tbody.innerHTML = '';
+            if (!review || review.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No data available.</td></tr>';
+                return;
+            }
+            review.forEach((item, idx) => {
+                // Get option text for selected and correct
+                let selectedText = item.selected ? (item.options[item.selected] || '-') : '-';
+                let correctText = item.correct_option ? (item.options[item.correct_option] || '-') : '-';
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td>${item.question}</td>
+                    <td>${selectedText}</td>
+                    <td>${correctText}</td>
+                    <td>${item.is_correct ? '<span class=\'text-success\'>Correct</span>' : '<span class=\'text-danger\'>Incorrect</span>'}</td>
+                    <td>${item.time_taken}</td>
+                `;
+                if (!item.is_correct) row.classList.add('table-danger');
+                else row.classList.add('table-success');
+                tbody.appendChild(row);
+            });
+        }
+        document.addEventListener('DOMContentLoaded', loadResult);
+    </script>
+</body>
+</html> 

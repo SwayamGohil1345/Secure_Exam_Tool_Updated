@@ -1,0 +1,16 @@
+{
+  "blocked_users": [
+    {
+      "email": "q@gmail.com",
+      "username": "q",
+      "blocked_at": "2026-04-26T16:00:42.630721",
+      "reason": "Multiple violations: Tab switching violations and others"
+    },
+    {
+      "email": "q@gmail.com",
+      "username": "q",
+      "blocked_at": "2026-04-26T16:00:45.652069",
+      "reason": "Multiple tab switching violations"
+    }
+  ]
+}

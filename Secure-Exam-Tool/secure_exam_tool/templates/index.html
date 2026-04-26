@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Exam Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Immediate blocked user check - runs before page loads -->
+    <script>
+        (function() {
+            // Server-provided blocked users data
+            const serverBlockedUsers = {{ blocked_users|tojson|safe if blocked_users else '[]' }};
+            const hasBlockedUsers = {{ 'true' if has_blocked_users else 'false' }};
+            
+            // Immediate check for blocked users
+            async function immediateBlockedCheck() {
+                try {
+                    // If server has blocked users, do comprehensive check
+                    if (hasBlockedUsers && serverBlockedUsers.length > 0) {
+                        // Check sessionStorage first
+                        const sessionEmail = sessionStorage.getItem('userEmail');
+                        const sessionUsername = sessionStorage.getItem('userUsername');
+                        
+                        // Check against server-provided blocked users
+                        for (const blockedUser of serverBlockedUsers) {
+                            if (sessionEmail === blockedUser.email || sessionUsername === blockedUser.username) {
+                                window.location.href = '/cheating_violation';
+                                return true;
+                            }
+                        }
+                        
+                        // Check localStorage for any blocked user data
+                        const userDataKey = 'examPortalUsers';
+                        const userData = JSON.parse(localStorage.getItem(userDataKey) || '{"users": []}');
+                        
+                        if (userData.users && userData.users.length > 0) {
+                            for (const localUser of userData.users) {
+                                for (const blockedUser of serverBlockedUsers) {
+                                    if (localUser.email === blockedUser.email || localUser.username === blockedUser.username) {
+                                        window.location.href = '/cheating_violation';
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Check all localStorage keys for any blocked user data
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key) {
+                                try {
+                                    const value = localStorage.getItem(key);
+                                    const parsedValue = JSON.parse(value);
+                                    
+                                    if (parsedValue && typeof parsedValue === 'object') {
+                                        for (const blockedUser of serverBlockedUsers) {
+                                            if (parsedValue.email === blockedUser.email || parsedValue.username === blockedUser.username) {
+                                                window.location.href = '/cheating_violation';
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                } catch (e) {
+                                    // Skip non-JSON values
+                                }
+                            }
+                        }
+                        
+                        // If there are blocked users but no match found, still redirect to be safe
+                        // This prevents any potential access by blocked users
+                        window.location.href = '/cheating_violation';
+                        return true;
+                    }
+                    
+                    // Fallback to API check if server data not available
+                    const sessionEmail = sessionStorage.getItem('userEmail');
+                    const sessionUsername = sessionStorage.getItem('userUsername');
+                    
+                    if (sessionEmail || sessionUsername) {
+                        const response = await fetch('/api/check_blocked_status', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                email: sessionEmail || '', 
+                                username: sessionUsername || '' 
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        if (response.ok && data.is_blocked) {
+                            window.location.href = '/cheating_violation';
+                            return true;
+                        }
+                    }
+                    
+                    return false;
+                } catch (error) {
+                    console.error('Error in immediate blocked check:', error);
+                    return false;
+                }
+            }
+            
+            // Run immediate check
+            immediateBlockedCheck();
+        })();
+    </script>
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+            color: #495057;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .main-card {
+            display: flex;
+            flex-direction: row;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.05);
+            max-width: 900px;
+            width: 95vw;
+            margin: 2rem auto;
+            position: relative;
+            border: 1px solid #dee2e6;
+            overflow: hidden;
+            min-height: 420px;
+            backdrop-filter: blur(8px) saturate(110%);
+        }
+        .main-card .left {
+            flex: 1 1 340px;
+            padding: 3.2rem 2.2rem 2.2rem 2.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .main-card .left:hover {
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            transform: translateY(-4px) scale(1.008);
+        }
+        .main-card .right {
+            flex: 1 1 340px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 320px;
+            min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+        .main-card .right .illustration {
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            animation: floatY 3.5s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+            border: 1px solid #e9ecef;
+        }
+        @keyframes floatY {
+            0% { transform: translateY(0); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+            100% { transform: translateY(-12px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+        }
+        .main-card .right .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 320px;
+            height: 180px;
+            background: radial-gradient(circle at 50% 50%, rgba(108, 117, 125, 0.1) 0%, rgba(233, 236, 239, 0) 80%);
+            filter: blur(32px);
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            animation: glowPulse 4s ease-in-out infinite alternate;
+        }
+        @keyframes glowPulse {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        .main-card .right .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.18;
+            animation: particleMove 7s linear infinite;
+        }
+        .main-card .right .particle1 {
+            width: 38px; height: 38px; background: #6c757d; left: 18%; top: 18%; animation-delay: 0s;
+        }
+        .main-card .right .particle2 {
+            width: 22px; height: 22px; background: #495057; left: 70%; top: 60%; animation-delay: 2s;
+        }
+        .main-card .right .particle3 {
+            width: 16px; height: 16px; background: #28a745; left: 60%; top: 20%; animation-delay: 4s;
+        }
+        @keyframes particleMove {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.15); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #343a40;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .form-group {
+            width: 100%;
+            margin-bottom: 1.2rem;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+            font-size: 1.1rem;
+            padding: 14px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .form-control:focus {
+            border-color: #495057;
+            box-shadow: 0 4px 16px rgba(73, 80, 87, 0.15);
+            background: #fff;
+            outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #495057 0%, #6c757d 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: 0 4px 16px rgba(73, 80, 87, 0.2);
+            transition: transform 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s cubic-bezier(.4,0,.2,1), filter 0.3s;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 8px 24px rgba(73, 80, 87, 0.3);
+            filter: brightness(1.05);
+        }
+        .btn-primary:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(73, 80, 87, 0.2);
+        }
+        .quote {
+            margin-top: 2.5rem;
+            color: #6c757d;
+            font-size: 1.1rem;
+            font-style: italic;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(18px);
+            animation: quoteFadeIn 1.2s 0.3s forwards;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            letter-spacing: 0.01em;
+        }
+        @keyframes quoteFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 900px) {
+            .main-card {
+                flex-direction: column;
+                min-height: unset;
+            }
+            .main-card .right {
+                min-width: unset;
+                min-height: 180px;
+                padding: 1.2rem 0;
+            }
+        }
+        @media (max-width: 600px) {
+            .main-card .left, .main-card .right {
+                padding: 1.2rem 0.7rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Auth Toggle Styles */
+        .auth-toggle {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 4px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            background: transparent;
+            color: #6c757d;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 1rem;
+        }
+        
+        .auth-tab.active {
+            background: linear-gradient(90deg, #495057 0%, #6c757d 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(73, 80, 87, 0.2);
+        }
+        
+        .auth-tab:hover:not(.active) {
+            background: rgba(108, 117, 125, 0.1);
+            color: #495057;
+        }
+        
+        /* LocalStorage Management Button */
+        .localstorage-manager {
+            text-align: center;
+        }
+        
+        .localstorage-btn {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .localstorage-btn:hover {
+            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* Modal Styles */
+        .localstorage-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .localstorage-modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border: 1px solid #dee2e6;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        .localstorage-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .localstorage-modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #343a40;
+        }
+        
+        .localstorage-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .localstorage-modal-close:hover {
+            background: #f8f9fa;
+            color: #495057;
+        }
+        
+        .localstorage-data {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+        }
+        
+        .localstorage-data pre {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #495057;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .localstorage-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .localstorage-action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        .localstorage-clear-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        
+        .localstorage-clear-btn:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+        
+        .localstorage-server-btn {
+            background: linear-gradient(135deg, #fd7e14 0%, #e55a00 100%);
+            color: white;
+        }
+        
+        .localstorage-server-btn:hover {
+            background: linear-gradient(135deg, #e55a00 0%, #cc4a00 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+        }
+        
+        .localstorage-blocked-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        
+        .localstorage-blocked-btn:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+        
+        .localstorage-close-btn {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
+        
+        .localstorage-close-btn:hover {
+            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(73, 80, 87, 0.3);
+        }
+        
+        .auth-form {
+            transition: all 0.3s ease;
+        }
+        
+        .auth-form.hidden {
+            display: none !important;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="main-card">
+        <div class="left">
+            <h1 class="mb-4">🔒 Welcome to Reasonify Exam Portal</h1>
+            
+            <!-- Login/Signup Toggle -->
+            <div class="auth-toggle mb-4">
+                <button id="loginTab" class="auth-tab active">Login</button>
+                <button id="signupTab" class="auth-tab">Sign Up</button>
+            </div>
+            
+            <!-- LocalStorage Management Button -->
+            <div class="localstorage-manager mb-3">
+                <button class="localstorage-btn" onclick="showLocalStorageData()">
+                    📊 View/Clear Data
+                </button>
+                            </div>
+                            
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group mb-3">
+                    <input type="email" class="form-control" id="loginEmail" required placeholder="Email" autocomplete="off" style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" id="loginUsername" required placeholder="Username" autocomplete="off" style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
+                            </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
+                    Login & Start Exam
+                            </button>
+                        </form>
+                        
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form" style="display: none;">
+                <div class="form-group mb-3">
+                    <input type="email" class="form-control" id="signupEmail" required placeholder="Email" autocomplete="off" style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" id="signupUsername" required placeholder="Username" autocomplete="off" style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
+                </div>
+                <button type="submit" class="btn btn-success btn-lg" style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
+                    Sign Up & Start Exam
+                </button>
+            </form>
+            <div class="quote">
+                “Success is the sum of small efforts, repeated day in and day out.”
+                        </div>
+                    </div>
+        <div class="right">
+            <div class="glow"></div>
+            <div class="particle particle1"></div>
+            <div class="particle particle2"></div>
+            <div class="particle particle3"></div>
+            <div class="illustration">
+                <!-- Placeholder SVG illustration -->
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="30" width="100" height="60" rx="12" fill="#e3f0ff" stroke="#667eea" stroke-width="2"/>
+                    <rect x="25" y="45" width="70" height="10" rx="3" fill="#667eea"/>
+                    <rect x="25" y="60" width="40" height="10" rx="3" fill="#764ba2"/>
+                    <circle cx="90" cy="65" r="7" fill="#4bb543"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- LocalStorage Modal -->
+    <div id="localStorageModal" class="localstorage-modal">
+        <div class="localstorage-modal-content">
+            <div class="localstorage-modal-header">
+                <h3 class="localstorage-modal-title">📊 LocalStorage Data Manager</h3>
+                <button class="localstorage-modal-close" onclick="closeLocalStorageModal()">&times;</button>
+            </div>
+            <div class="localstorage-data">
+                <pre id="localStorageData">Loading...</pre>
+                </div>
+            <div class="localstorage-actions">
+                <button class="localstorage-action-btn localstorage-clear-btn" onclick="clearSignupData()">
+                    👥 Clear Local Data
+                </button>
+                <button class="localstorage-action-btn localstorage-server-btn" onclick="clearServerData()">
+                    🖥️ Clear Server Data
+                </button>
+                <button class="localstorage-action-btn localstorage-blocked-btn" onclick="clearBlockedUsers()">
+                    🚫 Clear Blocked Users
+                </button>
+                <button class="localstorage-action-btn localstorage-clear-btn" onclick="clearAllData()">
+                    🗑️ Clear All Data
+                </button>
+                <button class="localstorage-action-btn localstorage-close-btn" onclick="closeLocalStorageModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // User data management - Backend API integration
+        const USER_DATA_KEY = 'examPortalUsers';
+        
+        // Initialize user data in localStorage (for backup)
+        function initializeUserData() {
+            try {
+                if (!localStorage.getItem(USER_DATA_KEY)) {
+                    localStorage.setItem(USER_DATA_KEY, JSON.stringify({ users: [] }));
+                }
+            } catch (error) {
+                console.error('Error initializing localStorage:', error);
+                // If localStorage fails, we'll rely on server-side storage only
+            }
+        }
+        
+        // Check if current user is blocked
+        async function checkIfUserBlocked() {
+            try {
+                const userEmail = sessionStorage.getItem('userEmail');
+                const userUsername = sessionStorage.getItem('userUsername');
+                
+                if (userEmail && userUsername) {
+                    const response = await fetch('/api/check_blocked_status', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email: userEmail, username: userUsername })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.is_blocked) {
+                        // User is blocked, redirect to violation page
+                        window.location.href = '/cheating_violation';
+                        return true;
+                    }
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking blocked status:', error);
+                return false;
+            }
+        }
+        
+        // Check if any user data in localStorage belongs to blocked users
+        async function checkLocalStorageForBlockedUsers() {
+            try {
+                // Get all user data from localStorage
+                const userData = JSON.parse(localStorage.getItem(USER_DATA_KEY) || '{"users": []}');
+                
+                if (userData.users && userData.users.length > 0) {
+                    // Check each user in localStorage against blocked users
+                    const response = await fetch('/api/blocked_users');
+                    if (response.ok) {
+                        const blockedData = await response.json();
+                        const blockedUsers = blockedData.blocked_users || [];
+                        
+                        for (const localUser of userData.users) {
+                            for (const blockedUser of blockedUsers) {
+                                if (localUser.email === blockedUser.email || localUser.username === blockedUser.username) {
+                                    // Found a blocked user in localStorage, redirect
+                                    window.location.href = '/cheating_violation';
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking localStorage for blocked users:', error);
+                return false;
+            }
+        }
+        
+        // Comprehensive check for blocked users in all storage locations
+        async function comprehensiveBlockedUserCheck() {
+            try {
+                // Get blocked users from server
+                const response = await fetch('/api/blocked_users');
+                if (!response.ok) {
+                    return false;
+                }
+                
+                const blockedData = await response.json();
+                const blockedUsers = blockedData.blocked_users || [];
+                
+                if (blockedUsers.length === 0) {
+                    return false; // No blocked users
+                }
+                
+                // Check sessionStorage
+                const sessionEmail = sessionStorage.getItem('userEmail');
+                const sessionUsername = sessionStorage.getItem('userUsername');
+                
+                if (sessionEmail || sessionUsername) {
+                    for (const blockedUser of blockedUsers) {
+                        if (sessionEmail === blockedUser.email || sessionUsername === blockedUser.username) {
+                            window.location.href = '/cheating_violation';
+                            return true;
+                        }
+                    }
+                }
+                
+                // Check localStorage for user data
+                const userData = JSON.parse(localStorage.getItem(USER_DATA_KEY) || '{"users": []}');
+                if (userData.users && userData.users.length > 0) {
+                    for (const localUser of userData.users) {
+                        for (const blockedUser of blockedUsers) {
+                            if (localUser.email === blockedUser.email || localUser.username === blockedUser.username) {
+                                window.location.href = '/cheating_violation';
+                                return true;
+                            }
+                        }
+                    }
+                }
+                
+                // Check all localStorage keys for any blocked user data
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key) {
+                        try {
+                            const value = localStorage.getItem(key);
+                            const parsedValue = JSON.parse(value);
+                            
+                            // Check if this localStorage item contains blocked user data
+                            if (parsedValue && typeof parsedValue === 'object') {
+                                for (const blockedUser of blockedUsers) {
+                                    if (parsedValue.email === blockedUser.email || parsedValue.username === blockedUser.username) {
+                                        window.location.href = '/cheating_violation';
+                                        return true;
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            // Skip non-JSON values
+                        }
+                    }
+                }
+                
+                return false;
+            } catch (error) {
+                console.error('Error in comprehensive blocked user check:', error);
+                return false;
+            }
+        }
+        
+        // Register user via backend API
+        async function registerUser(email, username) {
+            try {
+                // First check if user is blocked before attempting registration
+                const blockedCheckResponse = await fetch('/api/check_blocked_status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email, username: username })
+                });
+                
+                // Check if response is JSON
+                const contentType = blockedCheckResponse.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const blockedData = await blockedCheckResponse.json();
+                    if (blockedCheckResponse.ok && blockedData.is_blocked) {
+                        // User is blocked, redirect to violation page
+                        window.location.href = '/cheating_violation';
+                        return { success: false, message: 'User is blocked due to cheating violations.' };
+                    }
+                } else {
+                    console.warn('Blocked check returned non-JSON response');
+                }
+                
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, username })
+                });
+                
+                // Check if response is JSON
+                const responseContentType = response.headers.get('content-type');
+                if (responseContentType && responseContentType.includes('application/json')) {
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Also save to localStorage as backup (if available)
+                        try {
+                            const userData = JSON.parse(localStorage.getItem(USER_DATA_KEY) || '{"users": []}');
+                            userData.users.push({
+                                email: email,
+                                username: username,
+                                registeredAt: new Date().toISOString()
+                            });
+                            localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+                        } catch (localStorageError) {
+                            console.warn('localStorage backup failed, but registration succeeded on server:', localStorageError);
+                            // Registration still succeeds even if localStorage fails
+                        }
+                        return { success: true, message: data.message };
+                    } else {
+                        return { success: false, message: data.message };
+                    }
+                } else {
+                    // Handle non-JSON response (like HTML error page)
+                    console.error('Server returned non-JSON response for registration');
+                    return { success: false, message: 'Registration failed. Server error. Please try again.' };
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                return { success: false, message: 'Registration failed. Please try again.' };
+            }
+        }
+        
+        // Login user via backend API
+        async function loginUser(email, username) {
+            try {
+                // First check if user is blocked before attempting login
+                const blockedCheckResponse = await fetch('/api/check_blocked_status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email, username: username })
+                });
+                
+                // Check if response is JSON
+                const contentType = blockedCheckResponse.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const blockedData = await blockedCheckResponse.json();
+                    if (blockedCheckResponse.ok && blockedData.is_blocked) {
+                        // User is blocked, redirect to violation page
+                        window.location.href = '/cheating_violation';
+                        return { success: false, message: 'User is blocked due to cheating violations.' };
+                    }
+                } else {
+                    console.warn('Blocked check returned non-JSON response');
+                }
+                
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, username })
+                });
+                
+                // Check if response is JSON
+                const responseContentType = response.headers.get('content-type');
+                if (responseContentType && responseContentType.includes('application/json')) {
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        return { success: true, message: data.message };
+                    } else {
+                        return { success: false, message: data.message };
+                    }
+                } else {
+                    // Handle non-JSON response (like HTML error page)
+                    console.error('Server returned non-JSON response for login');
+                    return { success: false, message: 'Login failed. Server error. Please try again.' };
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                return { success: false, message: 'Login failed. Please try again.' };
+            }
+        }
+        
+        // Initialize on page load
+        initializeUserData();
+        
+        // Check if current user is blocked immediately and on page load
+        (async function() {
+            // Immediate check
+            const isBlockedImmediate = await comprehensiveBlockedUserCheck();
+            if (isBlockedImmediate) {
+                return; // User will be redirected
+            }
+        })();
+        
+        // Additional check on window load
+        window.addEventListener('load', async () => {
+            // Comprehensive check for blocked users in all storage locations
+            const isBlocked = await comprehensiveBlockedUserCheck();
+            
+            if (isBlocked) {
+                // User is blocked, will be redirected to violation page
+                return;
+            }
+        });
+        
+        // Check server connectivity
+        async function checkServerConnectivity() {
+            try {
+                const response = await fetch('/api/users');
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.ok;
+                } else {
+                    console.warn('Server returned non-JSON response');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Server connectivity check failed:', error);
+                return false;
+            }
+        }
+        
+        // Check server on page load
+        window.addEventListener('load', async () => {
+            const serverOnline = await checkServerConnectivity();
+            if (!serverOnline) {
+                console.warn('Server appears to be offline. Some features may not work.');
+            }
+        });
+        
+        // LocalStorage Management Functions
+        async function showLocalStorageData() {
+            const modal = document.getElementById('localStorageModal');
+            const dataElement = document.getElementById('localStorageData');
+            
+            // Show loading message
+            dataElement.textContent = 'Loading data...';
+            modal.style.display = 'block';
+            
+            // Collect all localStorage data
+            const allData = {};
+            const signupData = {};
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                try {
+                    const value = localStorage.getItem(key);
+                    // Try to parse JSON, if it fails, show as string
+                    try {
+                        const parsedValue = JSON.parse(value);
+                        allData[key] = parsedValue;
+                        
+                        // Specifically track signup/user data
+                        if (key === USER_DATA_KEY || key.includes('user') || key.includes('signup') || key.includes('register')) {
+                            signupData[key] = parsedValue;
+                        }
+                    } catch {
+                        allData[key] = value;
+                        if (key === USER_DATA_KEY || key.includes('user') || key.includes('signup') || key.includes('register')) {
+                            signupData[key] = value;
+                        }
+                    }
+                } catch (e) {
+                    allData[key] = 'Error reading data';
+                }
+            }
+            
+            // Try to fetch server-side user data
+            let serverData = null;
+            let blockedData = null;
+            try {
+                const response = await fetch('/api/users');
+                if (response.ok) {
+                    const serverResponse = await response.json();
+                    serverData = serverResponse.users || [];
+                }
+            } catch (error) {
+                serverData = 'Error fetching server data: ' + error.message;
+            }
+            
+            // Try to fetch blocked users data
+            try {
+                const blockedResponse = await fetch('/api/blocked_users');
+                if (blockedResponse.ok) {
+                    const blockedResponseData = await blockedResponse.json();
+                    blockedData = blockedResponseData.blocked_users || [];
+                }
+            } catch (error) {
+                blockedData = 'Error fetching blocked users data: ' + error.message;
+            }
+            
+            // Display the data with focus on signup data
+            let displayData = {
+                "📊 All LocalStorage Data": allData,
+                "👥 Local Signup/User Data": signupData,
+                "🖥️ Server-Side User Data": serverData,
+                "🚫 Blocked Users Data": blockedData,
+                "📝 User Data Key": USER_DATA_KEY,
+                "🔍 Total LocalStorage Items": localStorage.length,
+                "📊 Server Users Count": Array.isArray(serverData) ? serverData.length : 'N/A',
+                "🚫 Blocked Users Count": Array.isArray(blockedData) ? blockedData.length : 'N/A'
+            };
+            
+            const formattedData = JSON.stringify(displayData, null, 2);
+            dataElement.textContent = formattedData || 'No data found in localStorage';
+        }
+        
+        function closeLocalStorageModal() {
+            const modal = document.getElementById('localStorageModal');
+            modal.style.display = 'none';
+        }
+        
+        function clearLocalStorage() {
+            if (confirm('Are you sure you want to clear all localStorage data? This action cannot be undone.')) {
+                localStorage.clear();
+                
+                // Reinitialize localStorage after clearing
+                initializeUserData();
+                
+                document.getElementById('localStorageData').textContent = 'All localStorage data has been cleared.';
+                
+                // Show success message
+                setTimeout(() => {
+                    alert('✅ All localStorage data has been cleared successfully! localStorage has been reinitialized.');
+                    closeLocalStorageModal();
+                }, 500);
+            }
+        }
+        
+        async function clearServerData() {
+            if (confirm('Are you sure you want to clear all server-side user data? This will remove all registered users from the server. This action cannot be undone.')) {
+                try {
+                    const response = await fetch('/api/clear_users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        document.getElementById('localStorageData').textContent = 'Server-side user data has been cleared successfully.';
+                        
+                        setTimeout(() => {
+                            alert(`✅ Server data cleared successfully! ${data.message}`);
+                            closeLocalStorageModal();
+                        }, 500);
+                    } else {
+                        throw new Error(data.message || 'Failed to clear server data');
+                    }
+                } catch (error) {
+                    console.error('Error clearing server data:', error);
+                    alert(`❌ Failed to clear server data: ${error.message}`);
+                }
+            }
+        }
+        
+        async function clearBlockedUsers() {
+            if (confirm('Are you sure you want to clear all blocked users data? This will remove all blocked users from the server and allow them to register/login again. This action cannot be undone.')) {
+                try {
+                    // Clear blocked users from server
+                    const response = await fetch('/api/clear_blocked_users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        // Also clear any blocked users data from localStorage
+                        const keysToRemove = [];
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key && (key.includes('blocked') || key.includes('violation') || key.includes('cheat'))) {
+                                keysToRemove.push(key);
+                            }
+                        }
+                        
+                        keysToRemove.forEach(key => {
+                            localStorage.removeItem(key);
+                        });
+                        
+                        document.getElementById('localStorageData').textContent = 'Blocked users data has been cleared from both server and localStorage.';
+                        
+                        setTimeout(() => {
+                            alert(`✅ Blocked users data cleared successfully! ${data.message}\n\nRemoved ${keysToRemove.length} items from localStorage.`);
+                            closeLocalStorageModal();
+                        }, 500);
+                    } else {
+                        throw new Error(data.message || 'Failed to clear blocked users data');
+                    }
+                } catch (error) {
+                    console.error('Error clearing blocked users data:', error);
+                    alert(`❌ Failed to clear blocked users data: ${error.message}`);
+                }
+            }
+        }
+        
+        async function clearAllData() {
+            if (confirm('Are you sure you want to clear ALL data (both local and server)? This will remove all registered users completely. This action cannot be undone.')) {
+                try {
+                    // Clear localStorage
+                    localStorage.clear();
+                    initializeUserData();
+                    
+                    // Clear server data
+                    const response = await fetch('/api/clear_users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        document.getElementById('localStorageData').textContent = 'All data (local and server) has been cleared successfully.';
+                        
+                        setTimeout(() => {
+                            alert(`✅ All data cleared successfully! ${data.message}`);
+                            closeLocalStorageModal();
+                        }, 500);
+                    } else {
+                        throw new Error(data.message || 'Failed to clear server data');
+                    }
+                } catch (error) {
+                    console.error('Error clearing all data:', error);
+                    alert(`❌ Failed to clear all data: ${error.message}`);
+                }
+            }
+        }
+        
+        function clearSignupData() {
+            if (confirm('Are you sure you want to clear only signup/user data? This will remove all registered users.')) {
+                // Clear specific signup-related data
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key === USER_DATA_KEY || key.includes('user') || key.includes('signup') || key.includes('register')) {
+                        keysToRemove.push(key);
+                    }
+                }
+                
+                keysToRemove.forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                
+                // Reinitialize localStorage after clearing
+                initializeUserData();
+                
+                document.getElementById('localStorageData').textContent = 'Signup/user data has been cleared.';
+                
+                // Show success message
+                setTimeout(() => {
+                    alert(`✅ Signup data cleared successfully! Removed ${keysToRemove.length} items. localStorage has been reinitialized.`);
+                    closeLocalStorageModal();
+                }, 500);
+            }
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('localStorageModal');
+            if (event.target === modal) {
+                closeLocalStorageModal();
+            }
+        }
+        
+        // Real-time validation for signup form
+        let emailTimeout, usernameTimeout;
+        
+        document.getElementById('signupEmail').addEventListener('input', function() {
+            clearTimeout(emailTimeout);
+            const email = this.value.trim();
+            
+            if (email && email.includes('@')) {
+                emailTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch('/api/check_availability', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ email: email })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            if (data.email_exists) {
+                                this.style.borderColor = '#dc3545';
+                                this.style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
+                                showFieldError(this, 'Email already registered');
+                            } else {
+                                this.style.borderColor = '#28a745';
+                                this.style.boxShadow = '0 0 0 0.2rem rgba(40, 167, 69, 0.25)';
+                                clearFieldError(this);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Email check failed:', error);
+                    }
+                }, 500);
+            } else {
+                this.style.borderColor = '#dee2e6';
+                this.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+                clearFieldError(this);
+            }
+        });
+        
+        document.getElementById('signupUsername').addEventListener('input', function() {
+            clearTimeout(usernameTimeout);
+            const username = this.value.trim();
+            
+            if (username && username.length >= 3) {
+                usernameTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch('/api/check_availability', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ username: username })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            if (data.username_exists) {
+                                this.style.borderColor = '#dc3545';
+                                this.style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
+                                showFieldError(this, 'Username already taken');
+                            } else {
+                                this.style.borderColor = '#28a745';
+                                this.style.boxShadow = '0 0 0 0.2rem rgba(40, 167, 69, 0.25)';
+                                clearFieldError(this);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Username check failed:', error);
+                    }
+                }, 500);
+            } else {
+                this.style.borderColor = '#dee2e6';
+                this.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+                clearFieldError(this);
+            }
+        });
+        
+        function showFieldError(field, message) {
+            // Remove existing error message
+            const existingError = field.parentNode.querySelector('.field-error');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Add new error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'field-error';
+            errorDiv.style.cssText = `
+                color: #dc3545;
+                font-size: 0.85rem;
+                margin-top: 0.25rem;
+                font-family: 'Georgia', 'Times New Roman', serif;
+            `;
+            errorDiv.textContent = message;
+            field.parentNode.appendChild(errorDiv);
+        }
+        
+        function clearFieldError(field) {
+            const existingError = field.parentNode.querySelector('.field-error');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+        
+        // Tab switching functionality
+        document.getElementById('loginTab').addEventListener('click', function() {
+            document.getElementById('loginTab').classList.add('active');
+            document.getElementById('signupTab').classList.remove('active');
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+        });
+        
+        document.getElementById('signupTab').addEventListener('click', function() {
+            document.getElementById('signupTab').classList.add('active');
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('signupForm').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+        });
+        
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const username = document.getElementById('loginUsername').value.trim();
+            
+            if (!email || !username) {
+                showErrorMessage('Please fill in all fields.');
+                return;
+            }
+            
+            // Validate login via backend API
+            const loginResult = await loginUser(email, username);
+            
+            if (!loginResult.success) {
+                // Don't show error message if user is being redirected to violation page
+                if (!loginResult.message.includes('blocked') && !loginResult.message.includes('violations')) {
+                    showErrorMessage(loginResult.message);
+                }
+                return;
+            }
+            
+            showSuccessMessage('Login successful! Preparing exam...');
+            
+            // Store user info in session storage for blocking system
+            sessionStorage.setItem('userEmail', email);
+            sessionStorage.setItem('userUsername', username);
+            
+            // Store exam session data for countdown page
+            try {
+                const response = await fetch('/api/start_session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        student_id: username,
+                        exam_code: email
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'started') {
+                    // Store the exam URL for the countdown page
+                    sessionStorage.setItem('examRedirectUrl', `/exam/${data.session_id}`);
+                    
+                    // Redirect to countdown page
+                    setTimeout(() => {
+                        window.location.href = '/countdown';
+                    }, 1000);
+                }
+            } catch (error) {
+                showErrorMessage('Error starting exam session. Please try again.');
+            }
+        });
+        
+        // Signup form submission
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signupEmail').value.trim();
+            const username = document.getElementById('signupUsername').value.trim();
+            
+            if (!email || !username) {
+                showErrorMessage('Please fill in all fields.');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Registering...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Register user via backend API
+                const registerResult = await registerUser(email, username);
+                
+                if (!registerResult.success) {
+                    // Don't show error message if user is being redirected to violation page
+                    if (!registerResult.message.includes('blocked') && !registerResult.message.includes('violations')) {
+                        showErrorMessage(registerResult.message);
+                    }
+                    return;
+                }
+                
+                showSuccessMessage('Registration successful! Please login to continue.');
+                
+                // Redirect to login after successful registration
+                setTimeout(() => {
+                    // Switch to login tab
+                    document.getElementById('loginTab').click();
+                    // Clear signup form
+                    document.getElementById('signupEmail').value = '';
+                    document.getElementById('signupUsername').value = '';
+                    // Show success message
+                    showSuccessMessage('Please login with your new credentials to start the exam.');
+                }, 1500);
+            } catch (error) {
+                console.error('Registration submission error:', error);
+                showErrorMessage('Registration failed. Please check your connection and try again.');
+            } finally {
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Error message function
+        function showErrorMessage(message) {
+            // Don't show technical errors to users
+            if (message.includes('Expecting value') || message.includes('JSON') || message.includes('Server error') || 
+                message.includes('Failed to fetch') || message.includes('NetworkError')) {
+                message = 'Connection error. Please try again.';
+            }
+            
+            // Don't show error if user is being redirected to violation page
+            if (message.includes('blocked') || message.includes('violations')) {
+                return;
+            }
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger';
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                animation: slideInRight 0.5s ease-out;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            `;
+            errorDiv.innerHTML = `
+                <strong>❌ Error!</strong> ${message}
+            `;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.style.animation = 'slideOutRight 0.5s ease-in';
+                setTimeout(() => errorDiv.remove(), 500);
+            }, 3000);
+        }
+    </script>
+    <script>
+    // Success message function
+    function showSuccessMessage(message) {
+      const successDiv = document.createElement('div');
+      successDiv.className = 'alert alert-success';
+      successDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        animation: slideInRight 0.5s ease-out;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      `;
+      successDiv.innerHTML = `
+        <strong>🎉 Success!</strong> ${message}
+      `;
+      document.body.appendChild(successDiv);
+      
+      setTimeout(() => {
+        successDiv.style.animation = 'slideOutRight 0.5s ease-in';
+        setTimeout(() => successDiv.remove(), 500);
+      }, 3000);
+    }
+    
+    // Add CSS animations for success message
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,63 @@
+{
+  "users": [
+    {
+      "email": "swayam@gmail.com",
+      "username": "swayam",
+      "name": "swayam",
+      "registeredAt": "2025-08-24T08:31:16.135735",
+      "created_date": "2025-08-24 08:31:16",
+      "last_login": "2025-08-24 08:31:52",
+      "exams_taken": 0,
+      "average_score": "0%",
+      "total_warnings": 0,
+      "login_count": 2
+    },
+    {
+      "email": "swayamgeneralemail@gmail.com",
+      "username": "swayam1",
+      "name": "swayam1",
+      "registeredAt": "2025-08-24T08:33:22.750836",
+      "created_date": "2025-08-24 08:33:22",
+      "last_login": "2025-08-24 08:33:50",
+      "exams_taken": 0,
+      "average_score": "0%",
+      "total_warnings": 0,
+      "login_count": 2
+    },
+    {
+      "email": "swayamgohil@gmail.com",
+      "username": "swayamgohil",
+      "registeredAt": "2025-08-24T08:45:41.262112"
+    },
+    {
+      "email": "swayamgohil1@gmail.com",
+      "username": "swayamgohil1",
+      "registeredAt": "2025-08-24T09:02:59.789947"
+    },
+    {
+      "email": "ss@gmail.com",
+      "username": "ss",
+      "registeredAt": "2025-08-24T09:09:50.067816"
+    },
+    {
+      "email": "swayam2@gmail.com",
+      "username": "swayam2",
+      "registeredAt": "2025-08-24T09:22:46.172425"
+    },
+    {
+      "email": "s@gamil.com",
+      "username": "s",
+      "registeredAt": "2026-04-26T15:57:49.475597"
+    },
+    {
+      "email": "w@gmail.com",
+      "username": "w",
+      "registeredAt": "2026-04-26T15:58:23.990819"
+    },
+    {
+      "email": "q@gmail.com",
+      "username": "q",
+      "registeredAt": "2026-04-26T15:59:35.308746"
+    }
+  ]
+}

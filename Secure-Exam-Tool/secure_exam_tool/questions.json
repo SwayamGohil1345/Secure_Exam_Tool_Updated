@@ -1,0 +1,4175 @@
+[
+  {
+    "id": 1,
+    "question": "A train travels 120 km in 2 hours. What is its speed in km/h?",
+    "options": [
+      "40 km/h",
+      "50 km/h",
+      "60 km/h",
+      "70 km/h"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 2,
+    "question": "What is 25% of 80?",
+    "options": [
+      "15",
+      "20",
+      "25",
+      "30"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 3,
+    "question": "What is the area of a circle with radius 5 units?",
+    "options": [
+      "25π",
+      "50π",
+      "75π",
+      "100π"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 4,
+    "question": "A boat travels 15 km upstream in 3 hours and 15 km downstream in 2 hours. What is the speed of the stream?",
+    "options": [
+      "1 km/h",
+      "1.5 km/h",
+      "2 km/h",
+      "2.5 km/h"
+    ],
+    "correct_answer": 3,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 5,
+    "question": "A clock shows 3:15. What is the angle between the hour and minute hands?",
+    "options": [
+      "7.5°",
+      "15°",
+      "22.5°",
+      "30°"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 6,
+    "question": "Which word is a synonym for 'Eloquent'?",
+    "options": [
+      "Quiet",
+      "Articulate",
+      "Shy",
+      "Rude"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 7,
+    "question": "Identify the correct spelling:",
+    "options": [
+      "Accomodate",
+      "Accommodate",
+      "Accommodate",
+      "Accommodate"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 31,
+    "question": "What is the perimeter of a rectangle with length 8 units and width 6 units?",
+    "options": [
+      "14 units",
+      "28 units",
+      "48 units",
+      "56 units"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 32,
+    "question": "If a number is increased by 20% and then decreased by 20%, what is the net change?",
+    "options": [
+      "No change",
+      "4% decrease",
+      "4% increase",
+      "20% decrease"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 33,
+    "question": "If all students are learners and some learners are teachers, then:",
+    "options": [
+      "All students are teachers",
+      "Some students are teachers",
+      "No students are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 34,
+    "question": "Choose the word that means the same as 'Diligent':",
+    "options": [
+      "Lazy",
+      "Hardworking",
+      "Intelligent",
+      "Creative"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 51,
+    "question": "What is the value of 15% of 240?",
+    "options": [
+      "30",
+      "36",
+      "40",
+      "45"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 52,
+    "question": "A car travels 180 km in 3 hours. What is its speed in m/s?",
+    "options": [
+      "15 m/s",
+      "16.67 m/s",
+      "18 m/s",
+      "20 m/s"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 53,
+    "question": "What is the area of a triangle with base 8 units and height 6 units?",
+    "options": [
+      "12 square units",
+      "24 square units",
+      "48 square units",
+      "96 square units"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 54,
+    "question": "If all engineers are professionals and some professionals are managers, then:",
+    "options": [
+      "All engineers are managers",
+      "Some engineers are managers",
+      "No engineers are managers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 55,
+    "question": "Choose the word that means the same as 'Persistent':",
+    "options": [
+      "Temporary",
+      "Determined",
+      "Flexible",
+      "Weak"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 56,
+    "question": "What is the next number in the sequence: 3, 6, 9, 12, __?",
+    "options": [
+      "14",
+      "15",
+      "16",
+      "18"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 57,
+    "question": "A shopkeeper sells an item for Rs. 1200 at a profit of 20%. What was the cost price?",
+    "options": [
+      "Rs. 900",
+      "Rs. 1000",
+      "Rs. 1100",
+      "Rs. 1150"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 58,
+    "question": "If 'MACHINE' is coded as 'NBDIJOF', how is 'ENGINEER' coded?",
+    "options": [
+      "FOHJOEFS",
+      "FOHJOFES",
+      "FOHJOFER",
+      "FOHJOFEQ"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 59,
+    "question": "Complete the analogy: Doctor is to Hospital as Teacher is to:",
+    "options": [
+      "School",
+      "Classroom",
+      "Student",
+      "Book"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 60,
+    "question": "Choose the correct spelling:",
+    "options": [
+      "Occassion",
+      "Occasion",
+      "Occasssion",
+      "Occasssion"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 61,
+    "question": "What is the value of √(25 + 144)?",
+    "options": [
+      "11",
+      "13",
+      "15",
+      "17"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 62,
+    "question": "If 4 workers can complete a task in 8 days, how many workers are needed to complete it in 2 days?",
+    "options": [
+      "8 workers",
+      "12 workers",
+      "16 workers",
+      "20 workers"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 63,
+    "question": "Which figure comes next: △, ○, □, △, ○, __?",
+    "options": [
+      "△",
+      "○",
+      "□",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 64,
+    "question": "If A=1, B=2, C=3, D=4, what is the value of BAD?",
+    "options": [
+      "124",
+      "214",
+      "241",
+      "421"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 65,
+    "question": "What is the meaning of 'Arduous'?",
+    "options": [
+      "Easy",
+      "Difficult",
+      "Quick",
+      "Simple"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 66,
+    "question": "Solve: 2x + 5 = 13",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 67,
+    "question": "What is the volume of a cube with side length 4 units?",
+    "options": [
+      "16 cubic units",
+      "32 cubic units",
+      "48 cubic units",
+      "64 cubic units"
+    ],
+    "correct_answer": 3,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 68,
+    "question": "Which word doesn't belong: Lion, Tiger, Elephant, Cat?",
+    "options": [
+      "Lion",
+      "Tiger",
+      "Elephant",
+      "Cat"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 69,
+    "question": "If today is Wednesday, what day will it be after 10 days?",
+    "options": [
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 70,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "Between you and I",
+      "Between you and me",
+      "Between you and myself",
+      "Between you and mine"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 71,
+    "question": "What is the average of 12, 15, 18, and 21?",
+    "options": [
+      "15",
+      "16",
+      "16.5",
+      "17"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 72,
+    "question": "A rectangle has length 10 units and width 6 units. What is its diagonal length?",
+    "options": [
+      "8 units",
+      "10 units",
+      "12 units",
+      "14 units"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 73,
+    "question": "If 'BLUE' = 32, 'RED' = 27, then 'GREEN' = ?",
+    "options": [
+      "52",
+      "57",
+      "62",
+      "67"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 74,
+    "question": "Which number should replace the question mark: 1, 4, 9, 16, 25, ?",
+    "options": [
+      "30",
+      "35",
+      "36",
+      "40"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 75,
+    "question": "Choose the word that means the opposite of 'Generous':",
+    "options": [
+      "Kind",
+      "Stingy",
+      "Helpful",
+      "Friendly"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 76,
+    "question": "What is the probability of getting a head when tossing a coin?",
+    "options": [
+      "1/4",
+      "1/2",
+      "3/4",
+      "1"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 77,
+    "question": "A train travels 300 km in 4 hours. What is its speed in km/h?",
+    "options": [
+      "60 km/h",
+      "65 km/h",
+      "70 km/h",
+      "75 km/h"
+    ],
+    "correct_answer": 3,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 78,
+    "question": "If all scientists are researchers and some researchers are professors, then:",
+    "options": [
+      "All scientists are professors",
+      "Some scientists are professors",
+      "No scientists are professors",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 79,
+    "question": "Which letter comes next: A, C, E, G, __?",
+    "options": [
+      "H",
+      "I",
+      "J",
+      "K"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 80,
+    "question": "What is the meaning of 'Eloquent'?",
+    "options": [
+      "Quiet",
+      "Fluent",
+      "Shy",
+      "Rude"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 81,
+    "question": "What is 30% of 150?",
+    "options": [
+      "35",
+      "40",
+      "45",
+      "50"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 82,
+    "question": "What is the perimeter of a square with side length 7 units?",
+    "options": [
+      "21 units",
+      "28 units",
+      "35 units",
+      "49 units"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 83,
+    "question": "If 'COMPUTER' is coded as 'DPNQVUFS', how is 'LAPTOP' coded?",
+    "options": [
+      "MBQUPQ",
+      "MBQUPR",
+      "MBQUPS",
+      "MBQUPT"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 84,
+    "question": "Which number comes next: 2, 4, 8, 16, 32, __?",
+    "options": [
+      "48",
+      "56",
+      "64",
+      "72"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 85,
+    "question": "Complete the analogy: Pen is to Write as Knife is to:",
+    "options": [
+      "Cut",
+      "Cook",
+      "Eat",
+      "Sharp"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 86,
+    "question": "What is the value of 4² × 3?",
+    "options": [
+      "36",
+      "48",
+      "64",
+      "72"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 87,
+    "question": "A car travels 180 km in 3 hours. What is its speed in m/s?",
+    "options": [
+      "15 m/s",
+      "16.67 m/s",
+      "18 m/s",
+      "20 m/s"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 88,
+    "question": "If all birds can fly and some birds are sparrows, then:",
+    "options": [
+      "All sparrows can fly",
+      "Some sparrows can fly",
+      "No sparrows can fly",
+      "Cannot be determined"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 89,
+    "question": "Which figure comes next: ○, □, △, ○, □, __?",
+    "options": [
+      "○",
+      "□",
+      "△",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 90,
+    "question": "Choose the word that means the same as 'Diligent':",
+    "options": [
+      "Lazy",
+      "Hardworking",
+      "Intelligent",
+      "Creative"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 91,
+    "question": "What is the area of a circle with radius 6 units?",
+    "options": [
+      "36π",
+      "72π",
+      "108π",
+      "144π"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 92,
+    "question": "If 5 workers can complete a task in 10 days, how many days will 2 workers take?",
+    "options": [
+      "15 days",
+      "20 days",
+      "25 days",
+      "30 days"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 93,
+    "question": "If A=1, B=2, C=3, D=4, E=5, what is the value of CAB?",
+    "options": [
+      "312",
+      "321",
+      "123",
+      "213"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 94,
+    "question": "Which word doesn't belong: Apple, Orange, Banana, Carrot?",
+    "options": [
+      "Apple",
+      "Orange",
+      "Banana",
+      "Carrot"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 95,
+    "question": "What is the meaning of 'Ubiquitous'?",
+    "options": [
+      "Rare",
+      "Present everywhere",
+      "Expensive",
+      "Beautiful"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 96,
+    "question": "Solve: 4x - 8 = 12",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 97,
+    "question": "What is the value of √(64 + 36)?",
+    "options": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "easy"
+  },
+  {
+    "id": 98,
+    "question": "If today is Friday, what day will it be after 15 days?",
+    "options": [
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 99,
+    "question": "Which number should replace the question mark: 1, 3, 6, 10, 15, ?",
+    "options": [
+      "18",
+      "20",
+      "21",
+      "25"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "easy"
+  },
+  {
+    "id": 100,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "She and I are going",
+      "Her and I are going",
+      "She and me are going",
+      "Her and me are going"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "easy"
+  },
+  {
+    "id": 8,
+    "question": "What is the next number in the sequence: 2, 4, 8, 16, __?",
+    "options": [
+      "24",
+      "28",
+      "32",
+      "36"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 9,
+    "question": "A shopkeeper marks his goods 20% above cost price and gives a discount of 10%. What is his profit percentage?",
+    "options": [
+      "8%",
+      "10%",
+      "12%",
+      "15%"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 10,
+    "question": "The average of 5 numbers is 20. If one number is removed, the average becomes 18. What is the removed number?",
+    "options": [
+      "20",
+      "22",
+      "24",
+      "26"
+    ],
+    "correct_answer": 3,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 11,
+    "question": "In a certain code, '256' means 'red sweet apple', '637' means 'eat a fruit', and '358' means 'eat a sweet'. What does '6' stand for?",
+    "options": [
+      "eat",
+      "a",
+      "fruit",
+      "sweet"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 12,
+    "question": "If in a certain language, 'MADRAS' is coded as 'NBESBT', how is 'BOMBAY' coded?",
+    "options": [
+      "CPNCBZ",
+      "CPNCBX",
+      "CPNCBY",
+      "CPNCBW"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 13,
+    "question": "Complete the analogy: Book is to Reading as Fork is to:",
+    "options": [
+      "Eating",
+      "Cooking",
+      "Kitchen",
+      "Food"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 14,
+    "question": "Which of the following is a correct idiom?",
+    "options": [
+      "Break a leg",
+      "Break a hand",
+      "Break a foot",
+      "Break an arm"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 35,
+    "question": "A mixture contains milk and water in the ratio 3:2. If 10 liters of water is added, the ratio becomes 3:4. What is the initial quantity of milk?",
+    "options": [
+      "15 liters",
+      "20 liters",
+      "25 liters",
+      "30 liters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 41,
+    "question": "A mixture contains milk and water in the ratio 3:2. If 10 liters of water is added, the ratio becomes 3:4. What is the initial quantity of milk?",
+    "options": [
+      "15 liters",
+      "20 liters",
+      "25 liters",
+      "30 liters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 42,
+    "question": "What is the value of (2^3 × 3^2) ÷ (2^2 × 3)?",
+    "options": [
+      "6",
+      "12",
+      "18",
+      "24"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 43,
+    "question": "If 'PENCIL' is coded as 'QFOEJM', how is 'PAPER' coded?",
+    "options": [
+      "QBQFS",
+      "QBQFT",
+      "QBQFR",
+      "QBQFQ"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 44,
+    "question": "Which number comes next: 1, 3, 6, 10, 15, __?",
+    "options": [
+      "18",
+      "20",
+      "21",
+      "25"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 45,
+    "question": "Choose the word that is most opposite in meaning to 'Concise':",
+    "options": [
+      "Brief",
+      "Verbose",
+      "Clear",
+      "Precise"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 46,
+    "question": "Complete the sentence: The _____ of the situation was immediately apparent to everyone.",
+    "options": [
+      "gravity",
+      "levity",
+      "clarity",
+      "simplicity"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 101,
+    "question": "What is the value of 18% of 250?",
+    "options": [
+      "40",
+      "45",
+      "50",
+      "55"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 102,
+    "question": "A boat travels 20 km upstream in 4 hours and 20 km downstream in 2 hours. What is the speed of the stream?",
+    "options": [
+      "2 km/h",
+      "2.5 km/h",
+      "3 km/h",
+      "3.5 km/h"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 103,
+    "question": "If 'MECHANICAL' is coded as 'NFDIBOJDBM', how is 'ENGINEERING' coded?",
+    "options": [
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 104,
+    "question": "Which number should replace the question mark: 2, 6, 12, 20, 30, ?",
+    "options": [
+      "40",
+      "42",
+      "44",
+      "46"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 105,
+    "question": "Choose the word that means the same as 'Tenacious':",
+    "options": [
+      "Weak",
+      "Persistent",
+      "Flexible",
+      "Temporary"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 106,
+    "question": "Complete the analogy: Hammer is to Nail as Screwdriver is to:",
+    "options": [
+      "Screw",
+      "Wood",
+      "Tool",
+      "Metal"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 107,
+    "question": "What is the value of √(49 + 81)?",
+    "options": [
+      "11",
+      "13",
+      "15",
+      "17"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 108,
+    "question": "If 6 workers can complete a task in 12 days, how many workers are needed to complete it in 3 days?",
+    "options": [
+      "18 workers",
+      "20 workers",
+      "24 workers",
+      "30 workers"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 109,
+    "question": "If all engineers are professionals and some professionals are managers, then:",
+    "options": [
+      "All engineers are managers",
+      "Some engineers are managers",
+      "No engineers are managers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 110,
+    "question": "Which letter comes next: B, D, F, H, __?",
+    "options": [
+      "I",
+      "J",
+      "K",
+      "L"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 111,
+    "question": "What is the meaning of 'Pragmatic'?",
+    "options": [
+      "Theoretical",
+      "Practical",
+      "Idealistic",
+      "Abstract"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 112,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "The team are ready",
+      "The team is ready",
+      "The team were ready",
+      "The team have ready"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 113,
+    "question": "What is the area of a triangle with sides 5, 12, and 13 units?",
+    "options": [
+      "30 square units",
+      "60 square units",
+      "90 square units",
+      "120 square units"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 114,
+    "question": "A shopkeeper marks his goods 25% above cost price and gives a discount of 15%. What is his profit percentage?",
+    "options": [
+      "6.25%",
+      "8.75%",
+      "10%",
+      "12.5%"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 115,
+    "question": "If 'MACHINE' = 77, 'ENGINE' = 66, then 'MECHANICAL' = ?",
+    "options": [
+      "99",
+      "110",
+      "121",
+      "132"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 116,
+    "question": "Which number comes next: 1, 2, 4, 7, 11, __?",
+    "options": [
+      "14",
+      "15",
+      "16",
+      "17"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 117,
+    "question": "Choose the word that means the opposite of 'Benevolent':",
+    "options": [
+      "Kind",
+      "Malevolent",
+      "Generous",
+      "Charitable"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 118,
+    "question": "Complete the sentence: The _____ of the novel was so complex that readers found it difficult to follow.",
+    "options": [
+      "plot",
+      "character",
+      "setting",
+      "theme"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 119,
+    "question": "What is the probability of getting exactly 3 heads when tossing 4 coins?",
+    "options": [
+      "1/8",
+      "1/4",
+      "3/8",
+      "1/2"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 120,
+    "question": "A train crosses a platform in 40 seconds and a pole in 12 seconds. If the length of the train is 240 meters, what is the length of the platform?",
+    "options": [
+      "560 meters",
+      "600 meters",
+      "640 meters",
+      "680 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 121,
+    "question": "If all doctors are professionals and some professionals are teachers, then:",
+    "options": [
+      "All doctors are teachers",
+      "Some doctors are teachers",
+      "No doctors are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 122,
+    "question": "Which figure comes next: △, ○, □, △, ○, __?",
+    "options": [
+      "△",
+      "○",
+      "□",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 123,
+    "question": "What is the meaning of 'Ephemeral'?",
+    "options": [
+      "Eternal",
+      "Temporary",
+      "Permanent",
+      "Enduring"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 124,
+    "question": "Choose the word that best completes the sentence: The weather was so _____ that we decided to stay indoors.",
+    "options": [
+      "pleasant",
+      "inclement",
+      "sunny",
+      "warm"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 125,
+    "question": "Identify the part of speech of 'quickly' in the sentence: 'She quickly finished her homework.'",
+    "options": [
+      "Noun",
+      "Verb",
+      "Adjective",
+      "Adverb"
+    ],
+    "correct_answer": 3,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 201,
+    "question": "What is the value of 28% of 175?",
+    "options": [
+      "45",
+      "49",
+      "52",
+      "56"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 202,
+    "question": "A boat travels 30 km upstream in 6 hours and 30 km downstream in 3 hours. What is the speed of the stream?",
+    "options": [
+      "2.5 km/h",
+      "3 km/h",
+      "3.5 km/h",
+      "4 km/h"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 203,
+    "question": "If 'MECHANICAL' is coded as 'NFDIBOJDBM', how is 'ENGINEERING' coded?",
+    "options": [
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 204,
+    "question": "Which number should replace the question mark: 3, 6, 12, 24, 48, ?",
+    "options": [
+      "72",
+      "84",
+      "96",
+      "108"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 205,
+    "question": "Choose the word that means the same as 'Tenacious':",
+    "options": [
+      "Weak",
+      "Persistent",
+      "Flexible",
+      "Temporary"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 206,
+    "question": "Complete the analogy: Hammer is to Nail as Screwdriver is to:",
+    "options": [
+      "Screw",
+      "Wood",
+      "Tool",
+      "Metal"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 207,
+    "question": "What is the value of √(64 + 81)?",
+    "options": [
+      "11",
+      "13",
+      "15",
+      "17"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 208,
+    "question": "If 7 workers can complete a task in 14 days, how many workers are needed to complete it in 3 days?",
+    "options": [
+      "28 workers",
+      "30 workers",
+      "32 workers",
+      "35 workers"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 209,
+    "question": "If all engineers are professionals and some professionals are managers, then:",
+    "options": [
+      "All engineers are managers",
+      "Some engineers are managers",
+      "No engineers are managers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 210,
+    "question": "Which letter comes next: D, F, H, J, __?",
+    "options": [
+      "K",
+      "L",
+      "M",
+      "N"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 211,
+    "question": "What is the meaning of 'Pragmatic'?",
+    "options": [
+      "Theoretical",
+      "Practical",
+      "Idealistic",
+      "Abstract"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 212,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "The team are ready",
+      "The team is ready",
+      "The team were ready",
+      "The team have ready"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 213,
+    "question": "What is the area of a triangle with sides 7, 24, and 25 units?",
+    "options": [
+      "84 square units",
+      "168 square units",
+      "252 square units",
+      "336 square units"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 214,
+    "question": "A shopkeeper marks his goods 35% above cost price and gives a discount of 25%. What is his profit percentage?",
+    "options": [
+      "1.25%",
+      "2.5%",
+      "5%",
+      "7.5%"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 215,
+    "question": "If 'MECHANICAL' = 110, 'ENGINEERING' = 121, then 'TECHNICAL' = ?",
+    "options": [
+      "99",
+      "110",
+      "121",
+      "132"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 216,
+    "question": "Which number comes next: 2, 3, 5, 8, 13, __?",
+    "options": [
+      "18",
+      "19",
+      "20",
+      "21"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 217,
+    "question": "Choose the word that means the opposite of 'Concise':",
+    "options": [
+      "Brief",
+      "Verbose",
+      "Clear",
+      "Precise"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 218,
+    "question": "Complete the sentence: The _____ of the situation was immediately apparent to everyone.",
+    "options": [
+      "gravity",
+      "levity",
+      "clarity",
+      "simplicity"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 219,
+    "question": "What is the probability of getting exactly 3 heads when tossing 5 coins?",
+    "options": [
+      "1/8",
+      "3/16",
+      "5/16",
+      "7/16"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 220,
+    "question": "A train crosses a platform in 50 seconds and a pole in 20 seconds. If the length of the train is 400 meters, what is the length of the platform?",
+    "options": [
+      "600 meters",
+      "700 meters",
+      "800 meters",
+      "900 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 221,
+    "question": "If all doctors are professionals and some professionals are teachers, then:",
+    "options": [
+      "All doctors are teachers",
+      "Some doctors are teachers",
+      "No doctors are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 222,
+    "question": "Which figure comes next: △, ○, □, △, ○, __?",
+    "options": [
+      "△",
+      "○",
+      "□",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 223,
+    "question": "What is the meaning of 'Ephemeral'?",
+    "options": [
+      "Eternal",
+      "Temporary",
+      "Permanent",
+      "Enduring"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 224,
+    "question": "Choose the word that best completes the sentence: The weather was so _____ that we decided to stay indoors.",
+    "options": [
+      "pleasant",
+      "inclement",
+      "sunny",
+      "warm"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 225,
+    "question": "Identify the part of speech of 'quickly' in the sentence: 'She quickly finished her homework.'",
+    "options": [
+      "Noun",
+      "Verb",
+      "Adjective",
+      "Adverb"
+    ],
+    "correct_answer": 3,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 226,
+    "question": "What is the value of 32% of 125?",
+    "options": [
+      "35",
+      "40",
+      "45",
+      "50"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 227,
+    "question": "A boat travels 35 km upstream in 7 hours and 35 km downstream in 3.5 hours. What is the speed of the stream?",
+    "options": [
+      "2.5 km/h",
+      "3 km/h",
+      "3.5 km/h",
+      "4 km/h"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 228,
+    "question": "If 'ENGINEERING' is coded as 'FOHJOFFSJOH', how is 'MECHANICAL' coded?",
+    "options": [
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 229,
+    "question": "Which number should replace the question mark: 1, 4, 9, 16, 25, 36, 49, ?",
+    "options": [
+      "56",
+      "64",
+      "72",
+      "81"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 230,
+    "question": "Choose the word that means the same as 'Tenacious':",
+    "options": [
+      "Weak",
+      "Persistent",
+      "Flexible",
+      "Temporary"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 231,
+    "question": "Complete the analogy: Wrench is to Bolt as Screwdriver is to:",
+    "options": [
+      "Screw",
+      "Wood",
+      "Tool",
+      "Metal"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 232,
+    "question": "What is the value of √(121 + 169)?",
+    "options": [
+      "17",
+      "19",
+      "21",
+      "23"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 233,
+    "question": "If 9 workers can complete a task in 18 days, how many workers are needed to complete it in 4 days?",
+    "options": [
+      "36 workers",
+      "40 workers",
+      "45 workers",
+      "50 workers"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 234,
+    "question": "If all scientists are researchers and some researchers are professors, then:",
+    "options": [
+      "All scientists are professors",
+      "Some scientists are professors",
+      "No scientists are professors",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 235,
+    "question": "Which letter comes next: E, G, I, K, __?",
+    "options": [
+      "L",
+      "M",
+      "N",
+      "O"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 236,
+    "question": "What is the meaning of 'Pragmatic'?",
+    "options": [
+      "Theoretical",
+      "Practical",
+      "Idealistic",
+      "Abstract"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 237,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "The committee are divided",
+      "The committee is divided",
+      "The committee were divided",
+      "The committee have divided"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 238,
+    "question": "What is the area of a triangle with sides 8, 15, and 17 units?",
+    "options": [
+      "60 square units",
+      "120 square units",
+      "180 square units",
+      "240 square units"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 239,
+    "question": "A shopkeeper marks his goods 40% above cost price and gives a discount of 30%. What is his profit percentage?",
+    "options": [
+      "-2%",
+      "0%",
+      "2%",
+      "5%"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 240,
+    "question": "If 'MECHANICAL' = 110, 'ENGINEERING' = 121, then 'TECHNICAL' = ?",
+    "options": [
+      "99",
+      "110",
+      "121",
+      "132"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 241,
+    "question": "Which number comes next: 3, 4, 7, 11, 18, __?",
+    "options": [
+      "25",
+      "27",
+      "29",
+      "31"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 242,
+    "question": "Choose the word that means the opposite of 'Concise':",
+    "options": [
+      "Brief",
+      "Verbose",
+      "Clear",
+      "Precise"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 243,
+    "question": "Complete the sentence: The _____ of the situation was immediately apparent to everyone.",
+    "options": [
+      "gravity",
+      "levity",
+      "clarity",
+      "simplicity"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 244,
+    "question": "What is the probability of getting exactly 4 heads when tossing 6 coins?",
+    "options": [
+      "1/16",
+      "3/32",
+      "5/32",
+      "7/32"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 245,
+    "question": "A train crosses a platform in 55 seconds and a pole in 22 seconds. If the length of the train is 440 meters, what is the length of the platform?",
+    "options": [
+      "660 meters",
+      "770 meters",
+      "880 meters",
+      "990 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "medium"
+  },
+  {
+    "id": 246,
+    "question": "If all doctors are professionals and some professionals are teachers, then:",
+    "options": [
+      "All doctors are teachers",
+      "Some doctors are teachers",
+      "No doctors are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 247,
+    "question": "Which figure comes next: □, △, ○, □, △, __?",
+    "options": [
+      "□",
+      "△",
+      "○",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "medium"
+  },
+  {
+    "id": 248,
+    "question": "What is the meaning of 'Ephemeral'?",
+    "options": [
+      "Eternal",
+      "Temporary",
+      "Permanent",
+      "Enduring"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 249,
+    "question": "Choose the word that best completes the sentence: The weather was so _____ that we decided to stay indoors.",
+    "options": [
+      "pleasant",
+      "inclement",
+      "sunny",
+      "warm"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 250,
+    "question": "Identify the part of speech of 'quickly' in the sentence: 'She quickly finished her homework.'",
+    "options": [
+      "Noun",
+      "Verb",
+      "Adjective",
+      "Adverb"
+    ],
+    "correct_answer": 3,
+    "category": "verbal",
+    "difficulty": "medium"
+  },
+  {
+    "id": 15,
+    "question": "Solve: 3x - 7 = 8",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 16,
+    "question": "If 3 workers can complete a task in 6 days, how many days will 2 workers take?",
+    "options": [
+      "8 days",
+      "9 days",
+      "10 days",
+      "12 days"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 17,
+    "question": "What is the value of √(16 + 9)?",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 18,
+    "question": "If all roses are flowers and some flowers are red, then:",
+    "options": [
+      "All roses are red",
+      "Some roses are red",
+      "No roses are red",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 19,
+    "question": "Which figure comes next: ○, □, △, ○, □, __?",
+    "options": [
+      "○",
+      "□",
+      "△",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 20,
+    "question": "If A=1, B=2, C=3, what is the value of CAB?",
+    "options": [
+      "312",
+      "321",
+      "123",
+      "213"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 21,
+    "question": "If RED = 27, BLUE = 32, then GREEN = ?",
+    "options": [
+      "47",
+      "52",
+      "57",
+      "62"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 22,
+    "question": "Which word doesn't belong: Apple, Banana, Carrot, Orange?",
+    "options": [
+      "Apple",
+      "Banana",
+      "Carrot",
+      "Orange"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 23,
+    "question": "If today is Monday, what day will it be after 25 days?",
+    "options": [
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 24,
+    "question": "A family has 6 members. The average age of the family is 25 years. If the youngest member is 5 years old, what is the average age of the remaining members?",
+    "options": [
+      "28 years",
+      "29 years",
+      "30 years",
+      "31 years"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 25,
+    "question": "Choose the word that means the opposite of 'Benevolent':",
+    "options": [
+      "Kind",
+      "Generous",
+      "Malevolent",
+      "Charitable"
+    ],
+    "correct_answer": 2,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 26,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "Me and him went to the store",
+      "Him and I went to the store",
+      "He and I went to the store",
+      "I and he went to the store"
+    ],
+    "correct_answer": 2,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 27,
+    "question": "What is the meaning of 'Ubiquitous'?",
+    "options": [
+      "Rare",
+      "Present everywhere",
+      "Expensive",
+      "Beautiful"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 28,
+    "question": "Choose the word that best completes the sentence: The weather was so _____ that we decided to stay indoors.",
+    "options": [
+      "pleasant",
+      "inclement",
+      "sunny",
+      "warm"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 29,
+    "question": "Choose the word that is most similar in meaning to 'Pragmatic':",
+    "options": [
+      "Idealistic",
+      "Practical",
+      "Theoretical",
+      "Abstract"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 30,
+    "question": "Identify the part of speech of 'quickly' in the sentence: 'She quickly finished her homework.'",
+    "options": [
+      "Noun",
+      "Verb",
+      "Adjective",
+      "Adverb"
+    ],
+    "correct_answer": 3,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 41,
+    "question": "Solve the quadratic equation: x² - 5x + 6 = 0",
+    "options": [
+      "x = 2, 3",
+      "x = -2, -3",
+      "x = 1, 6",
+      "x = -1, -6"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 42,
+    "question": "A train crosses a platform in 30 seconds and a pole in 10 seconds. If the length of the train is 200 meters, what is the length of the platform?",
+    "options": [
+      "400 meters",
+      "500 meters",
+      "600 meters",
+      "700 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 43,
+    "question": "What is the probability of getting exactly 2 heads when tossing 3 coins?",
+    "options": [
+      "1/8",
+      "3/8",
+      "1/2",
+      "3/4"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 44,
+    "question": "If in a certain code language, 'COMPUTER' is written as 'RFUVQNPC', how is 'PRINTER' written?",
+    "options": [
+      "QSJOUFS",
+      "QSJOUFT",
+      "QSJOUFR",
+      "QSJOUFQ"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 45,
+    "question": "Which number should replace the question mark: 2, 6, 12, 20, 30, ?",
+    "options": [
+      "40",
+      "42",
+      "44",
+      "46"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 46,
+    "question": "If all doctors are professionals and some professionals are teachers, then:",
+    "options": [
+      "All doctors are teachers",
+      "Some doctors are teachers",
+      "No doctors are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 47,
+    "question": "Choose the word that means the same as 'Ephemeral':",
+    "options": [
+      "Eternal",
+      "Temporary",
+      "Permanent",
+      "Enduring"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 48,
+    "question": "Identify the correct usage: 'The data _____ analyzed yesterday.'",
+    "options": [
+      "was",
+      "were",
+      "is",
+      "are"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 49,
+    "question": "Choose the word that best fits: The _____ of the novel was so complex that readers found it difficult to follow.",
+    "options": [
+      "plot",
+      "character",
+      "setting",
+      "theme"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 50,
+    "question": "What is the meaning of 'Sycophant'?",
+    "options": [
+      "A flatterer",
+      "A critic",
+      "A leader",
+      "A follower"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 51,
+    "question": "Solve the quadratic equation: x² - 7x + 12 = 0",
+    "options": [
+      "x = 3, 4",
+      "x = -3, -4",
+      "x = 2, 6",
+      "x = -2, -6"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 52,
+    "question": "A train crosses a platform in 35 seconds and a pole in 15 seconds. If the length of the train is 300 meters, what is the length of the platform?",
+    "options": [
+      "400 meters",
+      "500 meters",
+      "600 meters",
+      "700 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 53,
+    "question": "What is the probability of getting exactly 2 heads when tossing 4 coins?",
+    "options": [
+      "1/8",
+      "3/8",
+      "1/2",
+      "3/4"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 54,
+    "question": "If in a certain code language, 'MECHANICAL' is written as 'NFDIBOJDBM', how is 'ENGINEERING' written?",
+    "options": [
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 55,
+    "question": "Which number should replace the question mark: 3, 6, 12, 24, 48, ?",
+    "options": [
+      "72",
+      "84",
+      "96",
+      "108"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 56,
+    "question": "If all engineers are professionals and some professionals are managers, then:",
+    "options": [
+      "All engineers are managers",
+      "Some engineers are managers",
+      "No engineers are managers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 57,
+    "question": "Choose the word that means the same as 'Sycophant':",
+    "options": [
+      "A flatterer",
+      "A critic",
+      "A leader",
+      "A follower"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 58,
+    "question": "Identify the correct usage: 'The data _____ analyzed yesterday.'",
+    "options": [
+      "was",
+      "were",
+      "is",
+      "are"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 59,
+    "question": "Choose the word that best fits: The _____ of the novel was so complex that readers found it difficult to follow.",
+    "options": [
+      "plot",
+      "character",
+      "setting",
+      "theme"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 60,
+    "question": "What is the meaning of 'Ubiquitous'?",
+    "options": [
+      "Rare",
+      "Present everywhere",
+      "Expensive",
+      "Beautiful"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 126,
+    "question": "What is the value of 22% of 180?",
+    "options": [
+      "35.6",
+      "39.6",
+      "42.6",
+      "45.6"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 127,
+    "question": "A boat travels 25 km upstream in 5 hours and 25 km downstream in 2.5 hours. What is the speed of the stream?",
+    "options": [
+      "2.5 km/h",
+      "3 km/h",
+      "3.5 km/h",
+      "4 km/h"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 128,
+    "question": "If 'ENGINEERING' is coded as 'FOHJOFFSJOH', how is 'MECHANICAL' coded?",
+    "options": [
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 129,
+    "question": "Which number should replace the question mark: 1, 4, 9, 16, 25, 36, ?",
+    "options": [
+      "45",
+      "49",
+      "54",
+      "64"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 130,
+    "question": "Choose the word that means the same as 'Tenacious':",
+    "options": [
+      "Weak",
+      "Persistent",
+      "Flexible",
+      "Temporary"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 131,
+    "question": "Complete the analogy: Wrench is to Bolt as Screwdriver is to:",
+    "options": [
+      "Screw",
+      "Wood",
+      "Tool",
+      "Metal"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 132,
+    "question": "What is the value of √(100 + 225)?",
+    "options": [
+      "15",
+      "17",
+      "18",
+      "20"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 133,
+    "question": "If 8 workers can complete a task in 15 days, how many workers are needed to complete it in 4 days?",
+    "options": [
+      "24 workers",
+      "28 workers",
+      "30 workers",
+      "32 workers"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 134,
+    "question": "If all scientists are researchers and some researchers are professors, then:",
+    "options": [
+      "All scientists are professors",
+      "Some scientists are professors",
+      "No scientists are professors",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 135,
+    "question": "Which letter comes next: C, E, G, I, __?",
+    "options": [
+      "J",
+      "K",
+      "L",
+      "M"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 136,
+    "question": "What is the meaning of 'Pragmatic'?",
+    "options": [
+      "Theoretical",
+      "Practical",
+      "Idealistic",
+      "Abstract"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 137,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "The committee are divided",
+      "The committee is divided",
+      "The committee were divided",
+      "The committee have divided"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 138,
+    "question": "What is the area of a triangle with sides 6, 8, and 10 units?",
+    "options": [
+      "24 square units",
+      "48 square units",
+      "72 square units",
+      "96 square units"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 139,
+    "question": "A shopkeeper marks his goods 30% above cost price and gives a discount of 20%. What is his profit percentage?",
+    "options": [
+      "4%",
+      "6%",
+      "8%",
+      "10%"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 140,
+    "question": "If 'MECHANICAL' = 110, 'ENGINEERING' = 121, then 'TECHNICAL' = ?",
+    "options": [
+      "99",
+      "110",
+      "121",
+      "132"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 141,
+    "question": "Which number comes next: 2, 3, 5, 8, 13, __?",
+    "options": [
+      "18",
+      "19",
+      "20",
+      "21"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 142,
+    "question": "Choose the word that means the opposite of 'Concise':",
+    "options": [
+      "Brief",
+      "Verbose",
+      "Clear",
+      "Precise"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 143,
+    "question": "Complete the sentence: The _____ of the situation was immediately apparent to everyone.",
+    "options": [
+      "gravity",
+      "levity",
+      "clarity",
+      "simplicity"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 144,
+    "question": "What is the probability of getting exactly 4 heads when tossing 5 coins?",
+    "options": [
+      "1/16",
+      "3/16",
+      "5/16",
+      "7/16"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 145,
+    "question": "A train crosses a platform in 45 seconds and a pole in 18 seconds. If the length of the train is 360 meters, what is the length of the platform?",
+    "options": [
+      "540 meters",
+      "600 meters",
+      "660 meters",
+      "720 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 146,
+    "question": "If all doctors are professionals and some professionals are teachers, then:",
+    "options": [
+      "All doctors are teachers",
+      "Some doctors are teachers",
+      "No doctors are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 147,
+    "question": "Which figure comes next: □, △, ○, □, △, __?",
+    "options": [
+      "□",
+      "△",
+      "○",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 148,
+    "question": "What is the meaning of 'Ephemeral'?",
+    "options": [
+      "Eternal",
+      "Temporary",
+      "Permanent",
+      "Enduring"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 149,
+    "question": "Choose the word that best completes the sentence: The weather was so _____ that we decided to stay indoors.",
+    "options": [
+      "pleasant",
+      "inclement",
+      "sunny",
+      "warm"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 150,
+    "question": "Identify the part of speech of 'quickly' in the sentence: 'She quickly finished her homework.'",
+    "options": [
+      "Noun",
+      "Verb",
+      "Adjective",
+      "Adverb"
+    ],
+    "correct_answer": 3,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 151,
+    "question": "What is the value of 25% of 200?",
+    "options": [
+      "40",
+      "50",
+      "60",
+      "70"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 152,
+    "question": "A car travels 150 km in 2.5 hours. What is its speed in km/h?",
+    "options": [
+      "50 km/h",
+      "55 km/h",
+      "60 km/h",
+      "65 km/h"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 153,
+    "question": "What is the area of a square with side length 9 units?",
+    "options": [
+      "72 square units",
+      "81 square units",
+      "90 square units",
+      "99 square units"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 154,
+    "question": "If all students are learners and some learners are teachers, then:",
+    "options": [
+      "All students are teachers",
+      "Some students are teachers",
+      "No students are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 155,
+    "question": "Choose the word that means the same as 'Diligent':",
+    "options": [
+      "Lazy",
+      "Hardworking",
+      "Intelligent",
+      "Creative"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 156,
+    "question": "What is the next number in the sequence: 4, 8, 12, 16, __?",
+    "options": [
+      "18",
+      "20",
+      "22",
+      "24"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 157,
+    "question": "A shopkeeper sells an item for Rs. 1500 at a profit of 25%. What was the cost price?",
+    "options": [
+      "Rs. 1100",
+      "Rs. 1200",
+      "Rs. 1300",
+      "Rs. 1400"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 158,
+    "question": "If 'COMPUTER' is coded as 'DPNQVUFS', how is 'LAPTOP' coded?",
+    "options": [
+      "MBQUPQ",
+      "MBQUPR",
+      "MBQUPS",
+      "MBQUPT"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 159,
+    "question": "Complete the analogy: Doctor is to Hospital as Engineer is to:",
+    "options": [
+      "Office",
+      "Factory",
+      "Site",
+      "Laboratory"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 160,
+    "question": "Choose the correct spelling:",
+    "options": [
+      "Occassion",
+      "Occasion",
+      "Occasssion",
+      "Occasssion"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 161,
+    "question": "What is the value of √(36 + 64)?",
+    "options": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 162,
+    "question": "If 5 workers can complete a task in 10 days, how many days will 2 workers take?",
+    "options": [
+      "15 days",
+      "20 days",
+      "25 days",
+      "30 days"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 163,
+    "question": "Which figure comes next: ○, □, △, ○, □, __?",
+    "options": [
+      "○",
+      "□",
+      "△",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 164,
+    "question": "If A=1, B=2, C=3, D=4, E=5, what is the value of BAD?",
+    "options": [
+      "124",
+      "214",
+      "241",
+      "421"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 165,
+    "question": "What is the meaning of 'Arduous'?",
+    "options": [
+      "Easy",
+      "Difficult",
+      "Quick",
+      "Simple"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 166,
+    "question": "Solve: 3x - 7 = 8",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 167,
+    "question": "What is the volume of a cube with side length 5 units?",
+    "options": [
+      "75 cubic units",
+      "100 cubic units",
+      "125 cubic units",
+      "150 cubic units"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 168,
+    "question": "Which word doesn't belong: Lion, Tiger, Elephant, Cat?",
+    "options": [
+      "Lion",
+      "Tiger",
+      "Elephant",
+      "Cat"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 169,
+    "question": "If today is Thursday, what day will it be after 12 days?",
+    "options": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 170,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "Between you and I",
+      "Between you and me",
+      "Between you and myself",
+      "Between you and mine"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 171,
+    "question": "What is the average of 10, 15, 20, and 25?",
+    "options": [
+      "15",
+      "16",
+      "17.5",
+      "18"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 172,
+    "question": "A rectangle has length 12 units and width 8 units. What is its diagonal length?",
+    "options": [
+      "10 units",
+      "12 units",
+      "14 units",
+      "16 units"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 173,
+    "question": "If 'BLUE' = 32, 'RED' = 27, then 'GREEN' = ?",
+    "options": [
+      "52",
+      "57",
+      "62",
+      "67"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 174,
+    "question": "Which number should replace the question mark: 1, 4, 9, 16, 25, ?",
+    "options": [
+      "30",
+      "35",
+      "36",
+      "40"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 175,
+    "question": "Choose the word that means the opposite of 'Generous':",
+    "options": [
+      "Kind",
+      "Stingy",
+      "Helpful",
+      "Friendly"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 176,
+    "question": "What is the probability of getting a tail when tossing a coin?",
+    "options": [
+      "1/4",
+      "1/2",
+      "3/4",
+      "1"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 177,
+    "question": "A train travels 400 km in 5 hours. What is its speed in km/h?",
+    "options": [
+      "70 km/h",
+      "75 km/h",
+      "80 km/h",
+      "85 km/h"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 178,
+    "question": "If all scientists are researchers and some researchers are professors, then:",
+    "options": [
+      "All scientists are professors",
+      "Some scientists are professors",
+      "No scientists are professors",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 179,
+    "question": "Which letter comes next: A, C, E, G, __?",
+    "options": [
+      "H",
+      "I",
+      "J",
+      "K"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 180,
+    "question": "What is the meaning of 'Eloquent'?",
+    "options": [
+      "Quiet",
+      "Fluent",
+      "Shy",
+      "Rude"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 181,
+    "question": "What is 35% of 160?",
+    "options": [
+      "50",
+      "55",
+      "56",
+      "60"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 182,
+    "question": "What is the perimeter of a square with side length 8 units?",
+    "options": [
+      "24 units",
+      "32 units",
+      "40 units",
+      "48 units"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 183,
+    "question": "If 'COMPUTER' is coded as 'DPNQVUFS', how is 'LAPTOP' coded?",
+    "options": [
+      "MBQUPQ",
+      "MBQUPR",
+      "MBQUPS",
+      "MBQUPT"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 184,
+    "question": "Which number comes next: 2, 4, 8, 16, 32, __?",
+    "options": [
+      "48",
+      "56",
+      "64",
+      "72"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 185,
+    "question": "Complete the analogy: Pen is to Write as Knife is to:",
+    "options": [
+      "Cut",
+      "Cook",
+      "Eat",
+      "Sharp"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 186,
+    "question": "What is the value of 4² × 3?",
+    "options": [
+      "36",
+      "48",
+      "64",
+      "72"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 187,
+    "question": "A car travels 180 km in 3 hours. What is its speed in m/s?",
+    "options": [
+      "15 m/s",
+      "16.67 m/s",
+      "18 m/s",
+      "20 m/s"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 188,
+    "question": "If all birds can fly and some birds are sparrows, then:",
+    "options": [
+      "All sparrows can fly",
+      "Some sparrows can fly",
+      "No sparrows can fly",
+      "Cannot be determined"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 189,
+    "question": "Which figure comes next: ○, □, △, ○, □, __?",
+    "options": [
+      "○",
+      "□",
+      "△",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 190,
+    "question": "Choose the word that means the same as 'Diligent':",
+    "options": [
+      "Lazy",
+      "Hardworking",
+      "Intelligent",
+      "Creative"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 191,
+    "question": "What is the area of a circle with radius 7 units?",
+    "options": [
+      "49π",
+      "98π",
+      "147π",
+      "196π"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 192,
+    "question": "If 6 workers can complete a task in 12 days, how many days will 3 workers take?",
+    "options": [
+      "18 days",
+      "20 days",
+      "24 days",
+      "30 days"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 193,
+    "question": "If A=1, B=2, C=3, D=4, E=5, what is the value of CAB?",
+    "options": [
+      "312",
+      "321",
+      "123",
+      "213"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 194,
+    "question": "Which word doesn't belong: Apple, Orange, Banana, Carrot?",
+    "options": [
+      "Apple",
+      "Orange",
+      "Banana",
+      "Carrot"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 195,
+    "question": "What is the meaning of 'Ubiquitous'?",
+    "options": [
+      "Rare",
+      "Present everywhere",
+      "Expensive",
+      "Beautiful"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 196,
+    "question": "Solve: 5x - 10 = 20",
+    "options": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 197,
+    "question": "What is the value of √(81 + 144)?",
+    "options": [
+      "13",
+      "15",
+      "17",
+      "19"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 198,
+    "question": "If today is Saturday, what day will it be after 18 days?",
+    "options": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 199,
+    "question": "Which number should replace the question mark: 1, 3, 6, 10, 15, ?",
+    "options": [
+      "18",
+      "20",
+      "21",
+      "25"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 200,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "She and I are going",
+      "Her and I are going",
+      "She and me are going",
+      "Her and me are going"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 61,
+    "question": "Solve the quadratic equation: x² - 8x + 15 = 0",
+    "options": [
+      "x = 3, 5",
+      "x = -3, -5",
+      "x = 2, 8",
+      "x = -2, -8"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 62,
+    "question": "A train crosses a platform in 45 seconds and a pole in 18 seconds. If the length of the train is 360 meters, what is the length of the platform?",
+    "options": [
+      "540 meters",
+      "600 meters",
+      "660 meters",
+      "720 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 63,
+    "question": "What is the probability of getting exactly 3 heads when tossing 5 coins?",
+    "options": [
+      "1/8",
+      "3/16",
+      "5/16",
+      "7/16"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 64,
+    "question": "If in a certain code language, 'MECHANICAL' is written as 'NFDIBOJDBM', how is 'ENGINEERING' written?",
+    "options": [
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH",
+      "FOHJOFFSJOH"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 65,
+    "question": "Which number should replace the question mark: 4, 8, 16, 32, 64, ?",
+    "options": [
+      "96",
+      "112",
+      "128",
+      "144"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 66,
+    "question": "If all engineers are professionals and some professionals are managers, then:",
+    "options": [
+      "All engineers are managers",
+      "Some engineers are managers",
+      "No engineers are managers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 67,
+    "question": "Choose the word that means the same as 'Sycophant':",
+    "options": [
+      "A flatterer",
+      "A critic",
+      "A leader",
+      "A follower"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 68,
+    "question": "Identify the correct usage: 'The data _____ analyzed yesterday.'",
+    "options": [
+      "was",
+      "were",
+      "is",
+      "are"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 69,
+    "question": "Choose the word that best fits: The _____ of the novel was so complex that readers found it difficult to follow.",
+    "options": [
+      "plot",
+      "character",
+      "setting",
+      "theme"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 70,
+    "question": "What is the meaning of 'Ubiquitous'?",
+    "options": [
+      "Rare",
+      "Present everywhere",
+      "Expensive",
+      "Beautiful"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 251,
+    "question": "What is the value of 38% of 200?",
+    "options": [
+      "70",
+      "74",
+      "76",
+      "80"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 252,
+    "question": "A boat travels 40 km upstream in 8 hours and 40 km downstream in 4 hours. What is the speed of the stream?",
+    "options": [
+      "2.5 km/h",
+      "3 km/h",
+      "3.5 km/h",
+      "4 km/h"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 253,
+    "question": "If 'ENGINEERING' is coded as 'FOHJOFFSJOH', how is 'MECHANICAL' coded?",
+    "options": [
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 254,
+    "question": "Which number should replace the question mark: 2, 6, 12, 20, 30, 42, ?",
+    "options": [
+      "54",
+      "56",
+      "58",
+      "60"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 255,
+    "question": "Choose the word that means the same as 'Tenacious':",
+    "options": [
+      "Weak",
+      "Persistent",
+      "Flexible",
+      "Temporary"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 256,
+    "question": "Complete the analogy: Hammer is to Nail as Screwdriver is to:",
+    "options": [
+      "Screw",
+      "Wood",
+      "Tool",
+      "Metal"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 257,
+    "question": "What is the value of √(144 + 196)?",
+    "options": [
+      "18",
+      "20",
+      "22",
+      "24"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 258,
+    "question": "If 10 workers can complete a task in 20 days, how many workers are needed to complete it in 4 days?",
+    "options": [
+      "40 workers",
+      "45 workers",
+      "50 workers",
+      "55 workers"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 259,
+    "question": "If all engineers are professionals and some professionals are managers, then:",
+    "options": [
+      "All engineers are managers",
+      "Some engineers are managers",
+      "No engineers are managers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 260,
+    "question": "Which letter comes next: F, H, J, L, __?",
+    "options": [
+      "M",
+      "N",
+      "O",
+      "P"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 261,
+    "question": "What is the meaning of 'Pragmatic'?",
+    "options": [
+      "Theoretical",
+      "Practical",
+      "Idealistic",
+      "Abstract"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 262,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "The team are ready",
+      "The team is ready",
+      "The team were ready",
+      "The team have ready"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 263,
+    "question": "What is the area of a triangle with sides 9, 40, and 41 units?",
+    "options": [
+      "180 square units",
+      "360 square units",
+      "540 square units",
+      "720 square units"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 264,
+    "question": "A shopkeeper marks his goods 45% above cost price and gives a discount of 35%. What is his profit percentage?",
+    "options": [
+      "-5.75%",
+      "-2.5%",
+      "0%",
+      "2.5%"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 265,
+    "question": "If 'MECHANICAL' = 110, 'ENGINEERING' = 121, then 'TECHNICAL' = ?",
+    "options": [
+      "99",
+      "110",
+      "121",
+      "132"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 266,
+    "question": "Which number comes next: 4, 5, 9, 14, 23, __?",
+    "options": [
+      "32",
+      "35",
+      "37",
+      "40"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 267,
+    "question": "Choose the word that means the opposite of 'Concise':",
+    "options": [
+      "Brief",
+      "Verbose",
+      "Clear",
+      "Precise"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 268,
+    "question": "Complete the sentence: The _____ of the situation was immediately apparent to everyone.",
+    "options": [
+      "gravity",
+      "levity",
+      "clarity",
+      "simplicity"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 269,
+    "question": "What is the probability of getting exactly 5 heads when tossing 7 coins?",
+    "options": [
+      "1/32",
+      "3/64",
+      "5/64",
+      "7/64"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 270,
+    "question": "A train crosses a platform in 60 seconds and a pole in 25 seconds. If the length of the train is 500 meters, what is the length of the platform?",
+    "options": [
+      "700 meters",
+      "800 meters",
+      "900 meters",
+      "1000 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 271,
+    "question": "If all doctors are professionals and some professionals are teachers, then:",
+    "options": [
+      "All doctors are teachers",
+      "Some doctors are teachers",
+      "No doctors are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 272,
+    "question": "Which figure comes next: △, ○, □, △, ○, __?",
+    "options": [
+      "△",
+      "○",
+      "□",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 273,
+    "question": "What is the meaning of 'Ephemeral'?",
+    "options": [
+      "Eternal",
+      "Temporary",
+      "Permanent",
+      "Enduring"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 274,
+    "question": "Choose the word that best completes the sentence: The weather was so _____ that we decided to stay indoors.",
+    "options": [
+      "pleasant",
+      "inclement",
+      "sunny",
+      "warm"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 275,
+    "question": "Identify the part of speech of 'quickly' in the sentence: 'She quickly finished her homework.'",
+    "options": [
+      "Noun",
+      "Verb",
+      "Adjective",
+      "Adverb"
+    ],
+    "correct_answer": 3,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 276,
+    "question": "What is the value of 42% of 150?",
+    "options": [
+      "60",
+      "63",
+      "66",
+      "70"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 277,
+    "question": "A boat travels 45 km upstream in 9 hours and 45 km downstream in 4.5 hours. What is the speed of the stream?",
+    "options": [
+      "2.5 km/h",
+      "3 km/h",
+      "3.5 km/h",
+      "4 km/h"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 278,
+    "question": "If 'ENGINEERING' is coded as 'FOHJOFFSJOH', how is 'MECHANICAL' coded?",
+    "options": [
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM",
+      "NFDIBOJDBM"
+    ],
+    "correct_answer": 0,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 279,
+    "question": "Which number should replace the question mark: 2, 4, 8, 16, 32, 64, ?",
+    "options": [
+      "96",
+      "112",
+      "128",
+      "144"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 280,
+    "question": "Choose the word that means the same as 'Tenacious':",
+    "options": [
+      "Weak",
+      "Persistent",
+      "Flexible",
+      "Temporary"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 281,
+    "question": "Complete the analogy: Wrench is to Bolt as Screwdriver is to:",
+    "options": [
+      "Screw",
+      "Wood",
+      "Tool",
+      "Metal"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 282,
+    "question": "What is the value of √(169 + 225)?",
+    "options": [
+      "19",
+      "21",
+      "23",
+      "25"
+    ],
+    "correct_answer": 1,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 283,
+    "question": "If 11 workers can complete a task in 22 days, how many workers are needed to complete it in 4 days?",
+    "options": [
+      "44 workers",
+      "50 workers",
+      "55 workers",
+      "60 workers"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 284,
+    "question": "If all scientists are researchers and some researchers are professors, then:",
+    "options": [
+      "All scientists are professors",
+      "Some scientists are professors",
+      "No scientists are professors",
+      "Cannot be determined"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 285,
+    "question": "Which letter comes next: G, I, K, M, __?",
+    "options": [
+      "N",
+      "O",
+      "P",
+      "Q"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 286,
+    "question": "What is the meaning of 'Pragmatic'?",
+    "options": [
+      "Theoretical",
+      "Practical",
+      "Idealistic",
+      "Abstract"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 287,
+    "question": "Choose the grammatically correct sentence:",
+    "options": [
+      "The committee are divided",
+      "The committee is divided",
+      "The committee were divided",
+      "The committee have divided"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 288,
+    "question": "What is the area of a triangle with sides 10, 24, and 26 units?",
+    "options": [
+      "120 square units",
+      "240 square units",
+      "360 square units",
+      "480 square units"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 289,
+    "question": "A shopkeeper marks his goods 50% above cost price and gives a discount of 40%. What is his profit percentage?",
+    "options": [
+      "-10%",
+      "-5%",
+      "0%",
+      "5%"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 290,
+    "question": "If 'MECHANICAL' = 110, 'ENGINEERING' = 121, then 'TECHNICAL' = ?",
+    "options": [
+      "99",
+      "110",
+      "121",
+      "132"
+    ],
+    "correct_answer": 1,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 291,
+    "question": "Which number comes next: 5, 6, 11, 17, 28, __?",
+    "options": [
+      "39",
+      "42",
+      "45",
+      "48"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 292,
+    "question": "Choose the word that means the opposite of 'Concise':",
+    "options": [
+      "Brief",
+      "Verbose",
+      "Clear",
+      "Precise"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 293,
+    "question": "Complete the sentence: The _____ of the situation was immediately apparent to everyone.",
+    "options": [
+      "gravity",
+      "levity",
+      "clarity",
+      "simplicity"
+    ],
+    "correct_answer": 0,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 294,
+    "question": "What is the probability of getting exactly 6 heads when tossing 8 coins?",
+    "options": [
+      "1/64",
+      "3/128",
+      "5/128",
+      "7/128"
+    ],
+    "correct_answer": 2,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 295,
+    "question": "A train crosses a platform in 65 seconds and a pole in 28 seconds. If the length of the train is 560 meters, what is the length of the platform?",
+    "options": [
+      "740 meters",
+      "840 meters",
+      "940 meters",
+      "1040 meters"
+    ],
+    "correct_answer": 0,
+    "category": "quantitative",
+    "difficulty": "hard"
+  },
+  {
+    "id": 296,
+    "question": "If all doctors are professionals and some professionals are teachers, then:",
+    "options": [
+      "All doctors are teachers",
+      "Some doctors are teachers",
+      "No doctors are teachers",
+      "Cannot be determined"
+    ],
+    "correct_answer": 3,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 297,
+    "question": "Which figure comes next: □, △, ○, □, △, __?",
+    "options": [
+      "□",
+      "△",
+      "○",
+      "◇"
+    ],
+    "correct_answer": 2,
+    "category": "logical",
+    "difficulty": "hard"
+  },
+  {
+    "id": 298,
+    "question": "What is the meaning of 'Ephemeral'?",
+    "options": [
+      "Eternal",
+      "Temporary",
+      "Permanent",
+      "Enduring"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 299,
+    "question": "Choose the word that best completes the sentence: The weather was so _____ that we decided to stay indoors.",
+    "options": [
+      "pleasant",
+      "inclement",
+      "sunny",
+      "warm"
+    ],
+    "correct_answer": 1,
+    "category": "verbal",
+    "difficulty": "hard"
+  },
+  {
+    "id": 300,
+    "question": "Identify the part of speech of 'quickly' in the sentence: 'She quickly finished her homework.'",
+    "options": [
+      "Noun",
+      "Verb",
+      "Adjective",
+      "Adverb"
+    ],
+    "correct_answer": 3,
+    "category": "verbal",
+    "difficulty": "hard"
+  }
+]
